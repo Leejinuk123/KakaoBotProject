@@ -43,7 +43,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                  );  
     selectGun = true;
   }
-  else {
+  else if(msg == '/셰리프'){
     replier.reply("철컥");
     replier.reply("["
                   +gunName
