@@ -15,7 +15,11 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
   }
   
   if (msg == "/디코"){
-   replier.reply("디스코드 링크 여기있어요~"+\n+'https://discord.gg/h627T9gTtp'+\n+"여기로 오시면 됩니다.");
+   replier.reply("디스코드 링크 여기있어요~ \n"+"https://discord.gg/h627T9gTtp"+"\n"+"여기로 오시면 됩니다.");
+   java.lang.Thread.sleep(1500);
+   replier.reply("아 맞다");
+   java.lang.Thread.sleep(1500);
+   replier.reply("디코닉이랑 카톡닉이랑 맞춰주세요!");
   }
 }
 
