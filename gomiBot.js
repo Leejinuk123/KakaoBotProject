@@ -1,4 +1,4 @@
-const scriptName = "고미봇2";
+const scriptName = "고미봇";
 /**
  * (string) room
  * (string) sender
@@ -25,6 +25,18 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     else if(rand_1_2 == '2'){
       output = '됬이 아니라 됐인데요.';}
       replier.reply(output);
+  }
+//인사해주기---------------------
+  if (msg.includes('들어오면 인사해주시고 닉변')) {
+    replier.reply("안녕하세요~! 공지확인하시고 닉변해주세요!");
+  }
+//디스코드 링크 보내주기---------------------
+  if (msg == "/디코"){
+    replier.reply("디스코드 링크 여기있어요~ \n"+"https://discord.gg/h627T9gTtp"+"\n"+"여기로 오시면 됩니다.");
+    java.lang.Thread.sleep(1500);
+    replier.reply("아 맞다");
+    java.lang.Thread.sleep(1500);
+    replier.reply("디코닉이랑 카톡닉이랑 맞춰주세요!");
   }
 }
 
