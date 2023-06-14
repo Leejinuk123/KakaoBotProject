@@ -1,4 +1,4 @@
-const scriptName = "고미봇2";
+const scriptName = "러샨룰렛";
 /**
  * (string) room
  * (string) sender
@@ -21,20 +21,18 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       replier.reply("이미 러시안룰렛이 진행중입니다.");
     } 
     else {
-      replier.reply("러시안룰렛의 총을 골라주세요.\n"+"/셰리프 : 6발 \n"+"/헤드헌터 : 8발 \n");
+      replier.reply("러시안룰렛의 총을 골라주세요.\n"+"/셰리프 : 6발 \n"+"/헤드헌터 : 8발");
       participants = [];
       enabled = true;
     }
   }
   
-  if (!enabled) return; //enabled 값이 false면 !enabled == true이기때문에 return이 실행되어 아래 코드가 실행되지 않는다.
+  if (!enabled&&!selectGun) return; //enabled 값이 false면 !enabled == true이기때문에 return이 실행되어 아래 코드가 실행되지 않는다.
   
   if (msg == "/헤드헌터"){
     maxGamer = 8;
     gunName = '헤드헌터(8발)';
-    java.lang.Thread.sleep(1500);
     replier.reply("철컥");
-    java.lang.Thread.sleep(1000);
     replier.reply("["
                   +gunName
                   +"]\n"
@@ -46,10 +44,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     selectGun = true;
   }
   else {
-    
-    java.lang.Thread.sleep(1500);
     replier.reply("철컥");
-    java.lang.Thread.sleep(1000);
     replier.reply("["
                   +gunName
                   +"]\n"
