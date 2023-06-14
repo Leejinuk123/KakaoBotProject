@@ -31,15 +31,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
   
   if (msg == "/헤드헌터"){
     maxGamer = 8;
-    selectGun = true;
-    gunName = '헤드헌터(8발)'
-  }
-  else {
-    selectGun = true;
-  }
-  
-  if (!selectGun) return; //총이 선택이 안되면 코드 중지.
-  if (selectGun){
+    gunName = '헤드헌터(8발)';
     java.lang.Thread.sleep(1500);
     replier.reply("철컥");
     java.lang.Thread.sleep(1000);
@@ -48,10 +40,28 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                   +"]\n"
                   +"러시안룰렛이 시작되었어요.\n"
                   +"참여를 원하시면 '/참여'를, \n"
-                  +"참여자들이 다 모였으면 '/시작'을"
+                  +"참여자들이 다 모였으면 '/시작'을 \n"
                   +"입력해주세요."
                  );  
+    selectGun = true;
   }
+  else {
+    
+    java.lang.Thread.sleep(1500);
+    replier.reply("철컥");
+    java.lang.Thread.sleep(1000);
+    replier.reply("["
+                  +gunName
+                  +"]\n"
+                  +"러시안룰렛이 시작되었어요.\n"
+                  +"참여를 원하시면 '/참여'를, \n"
+                  +"참여자들이 다 모였으면 '/시작'을 \n"
+                  +"입력해주세요."
+                 );  
+    selectGun = true;
+  }
+  
+  if (!selectGun) return; //총이 선택이 안되면 코드 중지.
   
   if (msg == "/참여" || msg == "/참가") {
     if (participants.length == maxGamer) {
