@@ -1,14 +1,28 @@
-var enabled = false;
-var participants = [];
+const scriptName = "기본러시안룰렛";
+/**
+ * (string) room
+ * (string) sender
+ * (boolean) isGroupChat
+ * (void) replier.reply(message)
+ * (boolean) replier.reply(room, message, hideErrorToast = false) // 전송 성공시 true, 실패시 false 반환
+ * (string) imageDB.getProfileBase64()
+ * (string) packageName
+ */
+//---------------------
+function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
 
-//러시안룰렛게임---------------------
-  if (msg == "/러시안룰렛") {
-    if (enabled) {
-      replier.reply("이미 러시안룰렛이 진행중입니다.");
-    } else {
-      replier.reply("러시안룰렛이 시작되었어요. 참여를 원하시면 '/참여'를, 참여자들이 다 모였으면 '/시작'을 입력해주세요.");
-      participants = [];
-      enabled = true;
+  var enabled = false;
+  var participants = [];
+
+  //러시안룰렛게임---------------------
+    if (msg == "/러시안룰렛") {
+      if (enabled) {
+        replier.reply("이미 러시안룰렛이 진행중입니다.");
+      } 
+      else {
+        replier.reply("러시안룰렛이 시작되었어요. 참여를 원하시면 '/참여'를, 참여자들이 다 모였으면 '/시작'을 입력해주세요.");
+        participants = [];
+        enabled = true;
       }
     }
     if (!enabled) return;
@@ -47,6 +61,15 @@ var participants = [];
             enabled = false;
         }
     }
-    
-  
-   
+}    
+//아래 4개의 메소드는 액티비티 화면을 수정할때 사용됩니다.
+function onCreate(savedInstanceState, activity) {
+  var textView = new android.widget.TextView(activity);
+  textView.setText("Hello, World!");
+  textView.setTextColor(android.graphics.Color.DKGRAY);
+  activity.setContentView(textView);
+}
+function onStart(activity) {}
+function onResume(activity) {}
+function onPause(activity) {}
+function onStop(activity) {}
