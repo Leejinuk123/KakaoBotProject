@@ -1,4 +1,4 @@
-const scriptName = "러샨룰렛";
+const scriptName = "발로란트버전러시안룰렛";
 /**
  * (string) room
  * (string) sender
