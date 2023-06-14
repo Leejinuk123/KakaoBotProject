@@ -39,16 +39,20 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
   }
   
   if (!selectGun) return; //총이 선택이 안되면 코드 중지.
-  java.lang.Thread.sleep(1500);
-  replier.reply("철컥");
-  java.lang.Thread.sleep(1000);
-  replier.reply("["
-                +gunName
-                +"]"
-                +"러시안룰렛이 시작되었어요.\n"
-                +"참여를 원하시면 '/참여'를, \n"
-                +"참여자들이 다 모였으면 '/시작'을 입력해주세요."
-               );
+  if (selectGun){
+    java.lang.Thread.sleep(1500);
+    replier.reply("철컥");
+    java.lang.Thread.sleep(1000);
+    replier.reply("["
+                  +gunName
+                  +"]\n"
+                  +"러시안룰렛이 시작되었어요.\n"
+                  +"참여를 원하시면 '/참여'를, \n"
+                  +"참여자들이 다 모였으면 '/시작'을"
+                  +"입력해주세요."
+                 );  
+  }
+  
   if (msg == "/참여" || msg == "/참가") {
     if (participants.length == maxGamer) {
       replier.reply("이미 참여자가 모두 찼습니다.");
