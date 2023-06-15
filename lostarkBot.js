@@ -1,1 +1,34 @@
 //프리셋 이름 xyiuwpkw
+//클라우드 이름 dnzj9lruv
+const scriptName = "로아봇";
+//---------------------
+function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
+  
+  if(msg == "test"){
+    const con = Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
+    const pictureURL = 
+          con.data('file','https://res.cloudinary.com/dnzj9lruv/image/upload/v1686817406/cld-sample-4.jpg')
+            .data('upload_preset','xyiuwpkw')
+            .ignoreContentType(True)
+            .post();
+    
+    replier.reply('${pictureURL}');
+  }
+  
+}
+
+//아래 4개의 메소드는 액티비티 화면을 수정할때 사용됩니다.
+function onCreate(savedInstanceState, activity) {
+  var textView = new android.widget.TextView(activity);
+  textView.setText("Hello, World!");
+  textView.setTextColor(android.graphics.Color.DKGRAY);
+  activity.setContentView(textView);
+}
+
+function onStart(activity) {}
+
+function onResume(activity) {}
+
+function onPause(activity) {}
+
+function onStop(activity) {}
