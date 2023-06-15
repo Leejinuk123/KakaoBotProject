@@ -1,13 +1,4 @@
 const scriptName = "발로란트버전러시안룰렛";
-/**
- * (string) room
- * (string) sender
- * (boolean) isGroupChat
- * (void) replier.reply(message)
- * (boolean) replier.reply(room, message, hideErrorToast = false) // 전송 성공시 true, 실패시 false 반환
- * (string) imageDB.getProfileBase64()
- * (string) packageName
- */
 var enabled = false;
 var selectGun = false;
 var participants = [];
@@ -28,11 +19,11 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
   }
   
   if (!enabled&&!selectGun) return; //enabled 값이 false면 !enabled == true이기때문에 return이 실행되어 아래 코드가 실행되지 않는다.
-  
+//총기설정---------------------
   if (msg == "/헤드헌터"){
     maxGamer = 8;
     gunName = '헤드헌터(8발)';
-    replier.reply("철컥");
+    //replier.reply("철컥"); //철컥은 생략하기로했다..
     replier.reply("["
                   +gunName
                   +"]\n"
@@ -44,7 +35,9 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     selectGun = true;
   }
   else if(msg == '/셰리프'){
-    replier.reply("철컥");
+    maxGamer = 6;
+    gunName = '셰리프(6발)';
+    //replier.reply("철컥"); //철컥은 생략하기로했다.. 너무 오래걸려
     replier.reply("["
                   +gunName
                   +"]\n"
@@ -57,7 +50,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
   }
   
   if (!selectGun) return; //총이 선택이 안되면 코드 중지.
-  
+//게임참가---------------------
   if (msg == "/참여" || msg == "/참가") {
     if (participants.length == maxGamer) {
       replier.reply("이미 참여자가 모두 찼습니다.");
@@ -69,12 +62,12 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       participants.push(sender);
       replier.reply(sender + "님께서 참여하셨습니다.\n"
                     +participants.length
-                    +"/"
+                    +" / "
                     +maxGamer
                    );
     }
   }
-  
+//게임시작---------------------
   if (msg == "/시작") {
     if (participants.length == 0) {
       replier.reply("참여자가 없어서 시작할 수 없습니다.");
