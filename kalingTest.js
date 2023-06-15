@@ -3,13 +3,8 @@
 const kalingModule = require('kaling').Kakao();
 const Kakao = new kalingModule();
 Kakao.init('2642767733346608749b39371caaabc7');
+const REST_API_KEY = "2642767733346608749b39371caaabc7";
 Kakao.login('leejinouk123@gmail.com', 'djswpsk1!');
-// //-----------------
-// function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
-
-  
-  
-// }
 
 
 
@@ -22,30 +17,38 @@ const scriptName = "kakao_link_test";
 // Kakao.login('', '');  // 카카오 계정 아이디와 비밀번호
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName) {
-  if(msg=='테스트'){
-  Kakao.send(room, 
-                  { "link_ver": "4.0", 
-                    "template_object": { "object_type" : "feed", 
-                                         "button_title": "테스트", 
-                                         "content"     : { "title": "테스트1", 
-                                                           "image_url": '', 
-                                                           "link": { "web_url": "", 
-                                                                     "mobile_web_url": "" }, 
-                                                           "description": "테스트2" }, 
-                                         "buttons"     : [{ "title": "버튼", 
-                                                            "link" : { "web_url": "",
-                                                                       "mobile_web_url": "" } 
-                                                         }]
-                                       }
-                  }
-            );
-  }
-  else if (msg == "test")
-  {
-    Kakao.send(room, {"link_ver"      : "4.0",
-                      "template_id"   : 38890,
-                      "template_args" : {}
-                                            },"custom");
+  function getKoGPTResponse(msg) {
+    let json;
+    let result;
+    try {
+
+        let data = {
+            "max_tokens": 16,
+            "temperature": 0.9,
+            "top_p": 1,
+            "n": 1,
+            "prompt": msg
+        };
+//{\"max_tokens\":16,\"temperature\":1,\"top_p\":1,\"n\":1,\"prompt\":\"안녕하세요\"}"
+        let response = org.jsoup.Jsoup.connect("https://api.kakaobrain.com/v1/inference/kogpt/generation")
+            .header("Authorization", "KakaoAK " + REST_API_KEY) // Open ai 토큰값 Authorization: KakaoAK {REST_API_KEY}
+            .header("Content-Type", "application/json")
+            .requestBody(JSON.stringify(data))
+            .ignoreContentType(true)
+            .ignoreHttpErrors(true)
+            .timeout(200000)
+            .post();
+
+        json = JSON.parse(response.text());
+        result = json.choices[0].message.content;
+    }
+    replier.reply(json);
+    // } catch(e){
+    //     result = e;
+    //     Log.e(e);
+    // }
+    // return result;
+
   }
 }
 
