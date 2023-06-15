@@ -12,9 +12,39 @@ const scriptName = "고미봇";
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   let rand_1_2;
 //짖기, 죽이기, 맞춤법훈수하기---------------------
-  if (msg.includes('고미봇')) {
-    replier.reply("멍멍");
-  }   
+  // if (msg.includes('고미봇')) {
+  //   replier.reply("멍멍");}
+  if (msg.includes('고미봇')){
+    switch (Math.floor(Math.random() * 9)) {
+      case 0:
+        replier.reply("멍멍");
+        break;
+      case 1:
+        replier.reply("멍멍");
+        break;
+      case 2:
+        replier.reply("멍멍");
+        break;
+      case 3:
+        replier.reply("멍멍");
+        break;
+      case 4:
+        replier.reply("(모른척)");
+        break;
+      case 5:
+        replier.reply("멍멍");
+        break;
+      case 6:
+        replier.reply("왈왈");
+        break;
+      case 7:
+        replier.reply("멍멍");
+        break;
+      case 8:
+        replier.reply("부르지마라");
+        break;
+    }
+  }  
   if (msg.includes('죽일까')) {
     replier.reply("죽일까요 보스?");
   }
