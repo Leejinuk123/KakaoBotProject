@@ -5,6 +5,11 @@ const REST_API_KEY = "8efcbd9e5bfe39410994c53a66fa92d7"; //REST API KEY값
 const scriptName = "kakao_link_test";
 var messageOut = "";
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName) {
+  if(msg.startsWith('/고미봇')){
+    msg = msg.replace('/고미봇', '')
+    replier.reply("들어가는 문자 : "+msg);
+    getKoGPTResponse(msg);
+  }
   function getKoGPTResponse(msg) {
     //replier.reply("확인용0");
     let json;
@@ -30,7 +35,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName)
         json = JSON.parse(response.text()); //html 형식의 파일을 json으로 파싱
         //replier.reply(json.generations[0].text); //json에서 []은 배열을 의미한다. {}은 키 밸류 값
         messageOut = json.generations[0].text;
-        replier.reply(messageOut);
+        replier.reply(msg+messageOut);
     }
      catch(e){
          result = e;
@@ -38,7 +43,6 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName)
          Log.e(json);
      }
   }
-  getKoGPTResponse(msg);
 }
 
 //-----------------------------------------------------------------------------------
