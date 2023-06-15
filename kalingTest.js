@@ -1,28 +1,13 @@
-// const scriptName = "고미봇";
 // //카카오링크 관련 모듈 선언부-----------------
-//const kalingModule = require('kaling').Kakao();
-//const Kakao = new kalingModule();
-//Kakao.init('2642767733346608749b39371caaabc7');
-const REST_API_KEY = "2642767733346608749b39371caaabc7";
-//Kakao.login('leejinouk123@gmail.com', 'djswpsk1!');
-
-
-
 const scriptName = "kakao_link_test";
-// const kalingModule = require('kaling').Kakao();
-// const Kakao = new kalingModule();
-// importClass(org.jsoup.Jsoup);
-
-// Kakao.init(''); // 자바스크립트 키
-// Kakao.login('', '');  // 카카오 계정 아이디와 비밀번호
-
+const REST_API_KEY = "8efcbd9e5bfe39410994c53a66fa92d7";
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName) {
   function getKoGPTResponse(msg) {
     replier.reply("확인용0");
     let json;
     let result;
     try {
-
+        
         let data = {
             "max_tokens": 16,
             "temperature": 0.9,
