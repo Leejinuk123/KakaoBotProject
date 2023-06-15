@@ -7,48 +7,47 @@ var gunName = '셰리프(6발)';
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
 //러시안룰렛게임---------------------
-  if (msg == "/러시안룰렛") {
+  if (msg == "/셰리프" || msg == "/헤드헌터") {
     if (enabled) {
       replier.reply("이미 러시안룰렛이 진행중입니다.");
     } 
     else {
-      replier.reply("러시안룰렛의 총을 골라주세요.\n"+"/셰리프 : 6발 \n"+"/헤드헌터 : 8발");
+      if (msg == "/헤드헌터"){
+        maxGamer = 8;
+        gunName = '헤드헌터(8발)';
+        //replier.reply("철컥"); //철컥은 생략하기로했다..
+        replier.reply("["
+                      +gunName
+                      +"]\n"
+                      +"러시안룰렛이 시작되었어요.\n"
+                      +"참여를 원하시면 '/참여'를, \n"
+                      +"참여자들이 다 모였으면 '/시작'을 \n"
+                      +"입력해주세요."
+                     );  
+        selectGun = true;
+      }
+      else if(msg == '/셰리프'){
+        maxGamer = 6;
+        gunName = '셰리프(6발)';
+        //replier.reply("철컥"); //철컥은 생략하기로했다.. 너무 오래걸려
+        replier.reply("["
+                      +gunName
+                      +"]\n"
+                      +"러시안룰렛이 시작되었어요.\n"
+                      +"참여를 원하시면 '/참여'를, \n"
+                      +"참여자들이 다 모였으면 '/시작'을 \n"
+                      +"입력해주세요."
+                     );  
+        selectGun = true;
+      }
+      //replier.reply("러시안룰렛의 총을 골라주세요.\n"+"/셰리프 : 6발 \n"+"/헤드헌터 : 8발");
       participants = [];
       enabled = true;
     }
   }
   
-  if (!enabled&&!selectGun) return; //enabled 값이 false면 !enabled == true이기때문에 return이 실행되어 아래 코드가 실행되지 않는다.
+  if (!enabled) return; //enabled 값이 false면 !enabled == true이기때문에 return이 실행되어 아래 코드가 실행되지 않는다.
 //총기설정---------------------
-  if (msg == "/헤드헌터"){
-    maxGamer = 8;
-    gunName = '헤드헌터(8발)';
-    //replier.reply("철컥"); //철컥은 생략하기로했다..
-    replier.reply("["
-                  +gunName
-                  +"]\n"
-                  +"러시안룰렛이 시작되었어요.\n"
-                  +"참여를 원하시면 '/참여'를, \n"
-                  +"참여자들이 다 모였으면 '/시작'을 \n"
-                  +"입력해주세요."
-                 );  
-    selectGun = true;
-  }
-  else if(msg == '/셰리프'){
-    maxGamer = 6;
-    gunName = '셰리프(6발)';
-    //replier.reply("철컥"); //철컥은 생략하기로했다.. 너무 오래걸려
-    replier.reply("["
-                  +gunName
-                  +"]\n"
-                  +"러시안룰렛이 시작되었어요.\n"
-                  +"참여를 원하시면 '/참여'를, \n"
-                  +"참여자들이 다 모였으면 '/시작'을 \n"
-                  +"입력해주세요."
-                 );  
-    selectGun = true;
-  }
-  
   if (!selectGun) return; //총이 선택이 안되면 코드 중지.
 //게임참가---------------------
   if (msg == "/참여" || msg == "/참가") {
