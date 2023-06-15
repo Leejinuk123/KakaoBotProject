@@ -14,3 +14,7 @@
 >
 > 세부내용은 **[해당 폴더](https://github.com/Leejinuk123/KakaoBotProject/tree/main/%EC%8B%9D%EB%8B%A8%EB%B4%87)**에서 기술
 ---
+### 2. [russianRoulette.js](https://github.com/Leejinuk123/KakaoBotProject/tree/main/%EB%9F%AC%EC%8B%9C%EC%95%88%EB%A3%B0%EB%A0%9B) (러시안룰렛봇)
+> 말그대로 러시안룰렛을 할 수 있는 봇이다.
+>
+> 잘 모르겠다면 해당 문서에 걸어둔 링크를 통해 알아보자..
