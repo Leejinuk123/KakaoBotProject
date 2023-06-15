@@ -1,10 +1,10 @@
 // const scriptName = "고미봇";
 // //카카오링크 관련 모듈 선언부-----------------
-const kalingModule = require('kaling').Kakao();
-const Kakao = new kalingModule();
-Kakao.init('2642767733346608749b39371caaabc7');
+//const kalingModule = require('kaling').Kakao();
+//const Kakao = new kalingModule();
+//Kakao.init('2642767733346608749b39371caaabc7');
 const REST_API_KEY = "2642767733346608749b39371caaabc7";
-Kakao.login('leejinouk123@gmail.com', 'djswpsk1!');
+//Kakao.login('leejinouk123@gmail.com', 'djswpsk1!');
 
 
 
@@ -18,6 +18,7 @@ const scriptName = "kakao_link_test";
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName) {
   function getKoGPTResponse(msg) {
+    replier.reply("확인용0");
     let json;
     let result;
     try {
@@ -41,15 +42,20 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName)
 
         json = JSON.parse(response.text());
         result = json.choices[0].message.content;
+        console.log(json,result);
+        replier.reply("확인용1");
     }
-    replier.reply(json);
-    // } catch(e){
-    //     result = e;
-    //     Log.e(e);
-    // }
+     catch(e){
+         result = e;
+         Log.e(json.id);
+         Log.e(json.id);
+         replier.reply("확인용2");
+    }
+    replier.reply(JSON.stringify(json));
     // return result;
 
   }
+  getKoGPTResponse(msg);
 }
 
 //-----------------------------------------------------------------------------------
