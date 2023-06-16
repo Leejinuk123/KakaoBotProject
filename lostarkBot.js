@@ -12,15 +12,22 @@ var dataName = "";
 var dataPicture = "";
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
-  if(msg.startsWith("/로아 "){
-    charName = msg.replace('/로아', '')
+  if(msg.startsWith("/로아 ")){
+    charName = msg.replace('/로아', '');
     // const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
     // const pictureURL = 
     //       con.data('file','https://imgnews.pstatic.net/image/006/2023/06/16/0000118483_001_20230616091501003.jpg?type=w647')
     //         .data('upload_preset','xyiuwpkw')
     //         .ignoreContentType(true)
     //         .post();
-    loaInfoHtml = org.jsoup.Jsoup.connect("https://loawa.com/char/" + charName).get();
+    loaInfoHtml = org.jsoup.Jsoup.connect("https://loawa.com/char/" + charName)
+      .header("referer", "https://loawa.com/char/" + charName)
+      .ignoreContentType(true)
+      .ignoreHttpErrors(true)
+      .timeout(200000)
+      .get();
+
+    // 'referer' : 'https://naver.com'
     dataWrap = loaInfoHtml.select("div.char-info-wrap");
     // https://loawa.com/char/(캐릭터이름)
 
