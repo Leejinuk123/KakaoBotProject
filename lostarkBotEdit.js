@@ -9,6 +9,7 @@ var loaInfoHtml;
 var dataWrap = "";
 var charName = "";
 var charImg = "";
+const cloudinary = "https://res.cloudinary.com/dnzj9lruv/image/upload";
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   if(msg.startsWith("/로아 ")){
@@ -24,12 +25,9 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                             .ignoreContentType(true)
                             .post();
     json = JSON.parse(pictureURL.text());
-    //json.public_id; 사진이름
-    charImg = "https://res.cloudinary.com/dnzj9lruv/image/upload/w_800,h_400,c_fill,g_auto/l_text:Arial_45_bold:"+charName[1]+",g_north_west,x_0,y_0,co_rgb:20c4f4/"+json.public_id;
-    const sendHtml = org.jsoup.Jsoup.connect("");
-    const picHtml = sendHtml.data()
-                            .header("og:image",charImg);
-                            .post();
+    charImg = json.public_id; //사진이름
+    charImg = cloudinary+"/c_thumb,w_800,h_400,c_fill/c_thumb,w_400,h_400,l_"+ charImg +"/fl_layer_apply,g_north_east,x_0,y_0/l_text:Arial_45_bold:"+ charName[1] +",g_north_west,x_100,y_80,co_rgb:EAEAEA/sasasa_csje7s;
+    //const sendHtml = org.jsoup.Jsoup.connect("");
     
     //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
     replier.reply(dataWrap);
