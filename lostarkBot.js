@@ -13,18 +13,18 @@ var dataPicture = "";
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   if(msg.startsWith("/로아 ")){
-    charName = msg.replace('/로아', '');
+    charName = msg.split(" ");
     // const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
     // const pictureURL = 
     //       con.data('file','https://imgnews.pstatic.net/image/006/2023/06/16/0000118483_001_20230616091501003.jpg?type=w647')
     //         .data('upload_preset','xyiuwpkw')
     //         .ignoreContentType(true)
     //         .post();
-    loaInfoHtml = org.jsoup.Jsoup.connect(""https://lostark.game.onstove.com/Profile/Character/" + charName).get();
+    loaInfoHtml = org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/" + charName[1]).get();
   
-    dataWrap = loaInfoHtml.select("profile-equipment__character");
+    dataWrap = loaInfoHtml.select("div.content.content--profile");
 
-    json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
+    //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
     replier.reply(dataWrap);
   }
   
