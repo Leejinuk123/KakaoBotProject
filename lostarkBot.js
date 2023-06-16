@@ -5,11 +5,10 @@
 // [출처] 이미지api강좌-이미지 편집(이미지 합성등)#3 (카카오톡 봇 커뮤니티) | 작성자 WaitingLava
 // https://res.cloudinary.com/dnzj9lruv/image/upload/w_800,h_400/colors-gold-thread-600x600_vax2ea
 const scriptName = "로아봇";
-var charName = "";
 var loaInfoHtml;
 var dataWrap = "";
-var dataName = "";
-var dataPicture = "";
+var charName = "";
+var charImg = "";
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   if(msg.startsWith("/로아 ")){
@@ -23,9 +22,10 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     loaInfoHtml = org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/" + charName[1]).get();
   
     dataWrap = loaInfoHtml.select("div.content.content--profile");
-
+    dataImg = dataWrap.select("profile-equipment__character").select("img").attr("src");
     //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
     replier.reply(dataWrap);
+    replier.reply(dataImg);
   }
   
 }
