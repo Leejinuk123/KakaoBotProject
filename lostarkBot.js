@@ -20,20 +20,11 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //         .data('upload_preset','xyiuwpkw')
     //         .ignoreContentType(true)
     //         .post();
-    loaInfoHtml = org.jsoup.Jsoup.connect("https://loawa.com/char/" + charName)
-      .header("referer", "https://loawa.com/char/" + charName)
-      .ignoreContentType(true)
-      .ignoreHttpErrors(true)
-      .timeout(200000)
-      .get();
+    loaInfoHtml = org.jsoup.Jsoup.connect(""https://lostark.game.onstove.com/Profile/Character/" + charName).get();
+  
+    dataWrap = loaInfoHtml.select("profile-equipment__character");
 
-    // 'referer' : 'https://naver.com'
-    dataWrap = loaInfoHtml.select("div.char-info-wrap");
-    // https://loawa.com/char/(캐릭터이름)
-
-    // json = JSON.parse(pictureURL.text()); //html 형식의 파일을 json으로 파싱
     json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
-    // messageOut = json.url;
     replier.reply(dataWrap);
   }
   
