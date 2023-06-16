@@ -11,6 +11,7 @@ var charName = "";
 var charImg = "";
 const cloudinary = "https://res.cloudinary.com/dnzj9lruv/image/upload";
 var enabled = false;
+var i = 1;
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   if(msg.startsWith("/로아 ")){
@@ -23,12 +24,15 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       enabled = true;
     }
 
-    if(!enabled) return;
-    
+    if(!enabled) {
+      replier.reply("없는 캐릭터 정보입니다.");  
+      return;
+    }    
     const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
     const pictureURL = 
                     con.data('file',charImg)
                             .data('upload_preset','xyiuwpkw')
+                            .data('public_id',"_"+i++)
                             .ignoreContentType(true)
                             .post();
     json = JSON.parse(pictureURL.text());
