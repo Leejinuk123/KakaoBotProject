@@ -13,19 +13,22 @@ var charImg = "";
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   if(msg.startsWith("/로아 ")){
     charName = msg.split(" ");
-    // const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
-    // const pictureURL = 
-    //       con.data('file','https://imgnews.pstatic.net/image/006/2023/06/16/0000118483_001_20230616091501003.jpg?type=w647')
-    //         .data('upload_preset','xyiuwpkw')
-    //         .ignoreContentType(true)
-    //         .post();
     loaInfoHtml = org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/" + charName[1]).get();
-  
     dataWrap = loaInfoHtml.select("div.content.content--profile");
-    dataImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src");
+    charImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src");
+
+    const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
+    const pictureURL = 
+          con.data('file',charImg)
+            .data('upload_preset','xyiuwpkw')
+            .ignoreContentType(true)
+            .post();
+    charImg = org.jsoup.Jsoup.connect("https://res.cloudinary.com/dnzj9lruv/image/upload/l_text:Arial_45_bold:"+charName+",g_north_west,x_0,y_0,co_rgb:20c4f4/"+charImg);
+    //
+    
     //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
     replier.reply(dataWrap);
-    replier.reply(dataImg);
+    replier.reply(charImg);
   }
   
 }
