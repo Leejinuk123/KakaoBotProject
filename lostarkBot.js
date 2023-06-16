@@ -23,7 +23,9 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
             .data('upload_preset','xyiuwpkw')
             .ignoreContentType(true)
             .post();
-    charImg = org.jsoup.Jsoup.connect("https://res.cloudinary.com/dnzj9lruv/image/upload/l_text:Arial_45_bold:"+charName+",g_north_west,x_0,y_0,co_rgb:20c4f4/"+charImg);
+            json = JSON.parse(pictureURL.text());
+    //charImg = json.public_id;
+    charImg = "https://res.cloudinary.com/dnzj9lruv/image/upload/w_800,h_400,c_fill,g_auto/l_text:Arial_45_bold:"+charName[1]+",g_north_west,x_0,y_0,co_rgb:20c4f4/"+json.public_id;
     //
     
     //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
