@@ -4,14 +4,17 @@ const scriptName = "로아봇";
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   if(msg == "test"){
-    const con = Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
+    const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
     const pictureURL = 
           con.data('file','https://imgnews.pstatic.net/image/006/2023/06/16/0000118483_001_20230616091501003.jpg?type=w647')
             .data('upload_preset','xyiuwpkw')
-            .ignoreContentType(True)
+            .ignoreContentType(true)
             .post();
-    
-    replier.reply('${pictureURL}');
+
+    json = JSON.parse(pictureURL.text()); //html 형식의 파일을 json으로 파싱
+    messageOut = json.url;
+    replier.reply(messageOut);
+    replier.reply(pictureURL);
   }
   
 }
