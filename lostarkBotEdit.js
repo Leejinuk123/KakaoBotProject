@@ -21,7 +21,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //replier.reply(charImg);
     if(charImg.startsWith("http")){
       enabled = true;
-    };
+    }
 
     if(!enabled) return;
     
