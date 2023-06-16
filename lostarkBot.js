@@ -22,7 +22,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     loaInfoHtml = org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/" + charName[1]).get();
   
     dataWrap = loaInfoHtml.select("div.content.content--profile");
-    dataImg = dataWrap.select("profile-equipment__character").select("img").attr("src");
+    dataImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src");
     //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
     replier.reply(dataWrap);
     replier.reply(dataImg);
