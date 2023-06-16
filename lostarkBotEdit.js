@@ -17,7 +17,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     loaInfoHtml = org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/" + charName[1]).get();
     dataWrap = loaInfoHtml.select("div.content.content--profile");
     charImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src");
-
+    replier.reply(charImg);
     const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
     const pictureURL = 
                     con.data('file',charImg)
