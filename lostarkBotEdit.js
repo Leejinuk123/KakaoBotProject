@@ -10,6 +10,7 @@ var dataWrap = "";
 var charName = "";
 var charImg = "";
 const cloudinary = "https://res.cloudinary.com/dnzj9lruv/image/upload";
+var enabled = false;
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   if(msg.startsWith("/로아 ")){
@@ -18,6 +19,12 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     dataWrap = loaInfoHtml.select("div.content.content--profile");
     charImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src");
     replier.reply(charImg);
+    if(charImg.startsWith("http")){
+      enabled = true;
+    };
+
+    if(!enabled) return;
+    
     const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
     const pictureURL = 
                     con.data('file',charImg)
@@ -34,6 +41,8 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     
     //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
     //replier.reply(dataWrap);
+
+    enabled = false;
   }
   
 }
