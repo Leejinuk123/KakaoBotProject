@@ -40,7 +40,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //charImg = cloudinary+"/c_thumb,w_800,h_400,c_fill/c_thumb,w_400,h_400,l_"+ charImg +"/fl_layer_apply,g_north_east,x_0,y_0/l_text:Arial_45_bold:"+ charName[1] +",g_north_west,x_100,y_80,co_rgb:EAEAEA/sasasa_csje7s";
     //replier.reply(charImg);
     //charImg = org.jsoup.Jsoup.connect("http://leejinouk123.dothome.co.kr/index.html/?charName="+charName[1]+"&imageLink="+charImg).get();
-    replier.reply("http://leejinouk123.dothome.co.kr/index.html/?charName="+charName[1]+"&imageLink="+charImg);
+    replier.reply("http://leejinouk123.dothome.co.kr/index.html/?cN="+charName[1]+"&iL="+charImg);
     //const sendHtml = org.jsoup.Jsoup.connect("");
     
     //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
