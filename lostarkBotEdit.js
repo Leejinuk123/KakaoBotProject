@@ -22,7 +22,7 @@ var charName = ""; //캐릭터 이름이 들어있는 변수
 var charImg = ""; //프로필 안의 캐릭터 사진 url이 담겨있는 변수 
 const cloudinary = "https://res.cloudinary.com/dnzj9lruv/image/upload"; //cloudinary url정보
 var enabled = false; //캐릭터가 있는지 없는지 유무 체크용
-var imgIndex = JSON.parse(FileStream.read("/sdcard/imgIndex.json")); //경로에 있는 파일을 읽습니다. 읽어서 imgNumber라는 변수에 몇 번째 사진인지 할당  JSON.parse(FileStream.read(path));
+var dataJSON = JSON.parse(FileStream.read("/sdcard/imgIndex.json")); //경로에 있는 파일을 읽습니다. 읽어서 imgNumber라는 변수에 몇 번째 사진인지 할당  JSON.parse(FileStream.read(path));
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   //명령어를 전달받고 로스트아크 공식 홈페이지에서 프로필 정보를 크롤링
@@ -40,18 +40,16 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
 
     //----------------------JSON 파일 형성
-    let index = imgIndex.index; //imgIndex는 json 형식이다.
-    let data = {
-	    "imgIndex": imgIndex.index
-    };
+    //dataJSON.imgIndex; //imgIndex는 json 형식이다. dataJSON.imgIndex 이거 자체가 이미 몇 번째 이미지인지 값임
     //----------------------JSON 파일 형성
 
     //이미지url을 받아서 cloudinary에 업로드------------------
+    dataJSON.imgIndex + 1;
     const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
     const pictureURL = 
                     con.data('file',charImg)
                             .data('upload_preset','xyiuwpkw')
-                            .data('public_id',"_"+data.imgIndex)
+                            .data('public_id',"_"+dataJSON.imgIndex)
                             .ignoreContentType(true)
                             .post();
     // json = JSON.parse(pictureURL.text());
@@ -61,13 +59,12 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //charImg = org.jsoup.Jsoup.connect("http://leejinouk123.dothome.co.kr/index.html/?charName="+charName[1]+"&imageLink="+charImg).get();
     
     //php서버에 get방식으로 정보를 전달 후 웹페이지 생성한 다음에 카카오톡으로 링크 전송------------------------------
-    replier.reply("http://leejinouk123.dothome.co.kr/index.html/?cN="+charName[1]+"&iL=_"+data.imgIndex);
-    FileStream.write("/sdcard/imgIndex.json", JSON.stringify(data.imgIndex+1));
+    replier.reply("http://leejinouk123.dothome.co.kr/index.html/?cN="+charName[1]+"&iL=_"+dataJSON.imgIndex);
+    FileStream.write("/sdcard/imgIndex.json", JSON.stringify(dataJSON));
     //const sendHtml = org.jsoup.Jsoup.connect("");
     
     //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
     //replier.reply(dataWrap);
-    i++;
     enabled = false;
   }
   
