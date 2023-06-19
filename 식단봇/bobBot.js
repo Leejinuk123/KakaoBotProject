@@ -10,17 +10,23 @@ const scriptName = "고미봇";
  */
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
     if (msg == "오밥") { //오늘 식단을 알려주는 명령어
-    var command;
-    var date = new Date();
-    command = date.getDay(); //요일을 받아낸다. 요일 값은 정수로 넘어온다.
-    showMenu(command); //showMenu라는 function으로 넘겨보냄 해당 부분은 '낼밥' 명령어에서도 동일한 로직을 가진다.
-  } else if (msg == "낼밥") { //내일 식단을 알려주는 명령어
-    var command;
-    var date = new Date();
-    if (date.getDay() == 6) command = date.getDay() - 6; //해당 코드는 정수로 넘어온 요일값에 +1을 더해 다음 요일의 값을 넘겨준다.
-    else command = date.getDay() + 1; //단 일요일의 경우 주의 마지막이라 예외처리로 월요일값으로 변경해준다.
-    showMenu(command);
-  }
+        var command;
+        var date = new Date();
+        command = date.getDay(); //요일을 받아낸다. 요일 값은 정수로 넘어온다. 월 = 1, 화 = 2, 토= 6, 일 = 0
+        //replier.reply(command) : 1; 일요일은 = 7
+        showMenu(command); //showMenu라는 function으로 넘겨보냄 해당 부분은 '낼밥' 명령어에서도 동일한 로직을 가진다.
+    } else if (msg == "낼밥") { //내일 식단을 알려주는 명령어
+        var command;
+        var date = new Date();
+        if (data.getday() == 7) {replier.reply("식단이 업로드가 안됐습니다.\n월요일에 실행해주세요"); return;}
+            else command = date.getDay() + 1; //토요일에 실행한 명령어가 아니라면 +1을 하여 다시 작동한다.
+        // if (date.getDay() == 6) command = date.getDay() - 6; //해당 코드는 정수로 넘어온 요일값에 +1을 더해 다음 요일의 값을 넘겨준다. 토요일에 '낼밥' 명령어를 치면 일요일 식단이 나와야한다. 
+        //                                                      //그래서 일요일 command 값을 애초에 0으로 준다
+        //     else if (data.getday() == 7) {replier.reply("식단이 업로드가 안됐습니다.\n월요일에 실행해주세요"); return;}
+        //     else command = date.getDay() + 1; //토요일에 실행한 명령어가 아니라면 +1을 하여 다시 작동한다.
+        //                                       //단 일요일의 경우 주의 마지막이라 예외처리가 없다. 일요일의 값은 7이다.
+        showMenu(command);
+    }
   //data[1] : 월 ~ data[7] : 일
   //data는 아침~점심~저녁 다음요일 첫글자 출력
   //weekMenu[0]을 해야 아침~점심~저녁만 나온다.
@@ -31,7 +37,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     var data = org.jsoup.Jsoup.connect("https://dorm.andong.ac.kr/2019//food_menu/food_menu.htm").get(); //식단 사이트를 크롤링해온다.
     data = data.select("tbody").text();
     data = data.split("요일");
-    splitString = [" 화", " 수", " 목", " 금", " 토", " 일", " "]; //가져온 식단표를 요일별로 분리한다.
+    splitString = [" 화", " 수", " 목", " 금", " 토", " 일", " "]; //가져온 식단표를 요일별로 분리한다. 월요일은 자동 분리
     switch (command) {
       //월
       case 1:
@@ -58,15 +64,15 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
         bringMenu(command, data);
         break;
       //일 command = 0 일요일은 data[7]
-      case 0:
+      case 7:
         bringMenu(command, data);
         break;
     }
   }
   // 2. bringMenu---------------
   function bringMenu(command, data) { //데이터와 요일값을 이용해 가져온 데이터를 가공한다.
-    //일요일이면? command=0, data[7]
-    if (command == 0) command = 7;
+    // //일요일이면? command=0, data[7]
+    // if (command == 0) command = 7;
     weekMenu = data[command].split("아침");
     weekMenu = weekMenu[1].split(splitString[command - 1]);
     messageOut(weekMenu); //마지막으로 메세지 출력 function으로 넘겨준다.
@@ -77,12 +83,12 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     lunch = breakfast[1].split("저녁"); // lunch[0] 점심
     dinner = lunch[1]; // dinner 저녁
     message =
-      "아침\n-----\n" +
-      breakfast[0] +
-      "\n점심\n-----\n" +
-      lunch[0] +
-      "\n저녁\n-----\n" +
-      dinner;
+              "아침\n----- \n" 
+              + breakfast[0] 
+              + "\n점심\n----- \n" 
+              + lunch[0] 
+              + "\n저녁\n----- \n" 
+              + dinner;
     replier.reply(message);
   } 
 }
