@@ -22,6 +22,8 @@
 > ~~물론 언제 수정할 진 미정~~
 > 
 > 2023.06.19 최종 버그 수정
+>
+> 이젠 토요일과 일요일에도 명령어 시행 시 정상 수행하게끔 수정했음. 식단표가 없을 때 오류가 나지않고 예외처리를 하여 출력하게 변경했음.
 ---
 ### 실행 사진
 <center><img src="https://github.com/Leejinuk123/KakaoBotProject/assets/50895677/2562d6f6-9c1d-4f7c-b187-8cc1fbd5e07f" width="50%" height="10%"></center>
