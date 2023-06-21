@@ -2,7 +2,6 @@
 //클라우드 이름 dnzj9lruv
 //800x400 카카오톡 미리보기 사진 크기
 //https://res.cloudinary.com/dnzj9lruv/image/upload/colors-gold-thread-600x600_vax2ea
-// [출처] 이미지api강좌-이미지 편집(이미지 합성등)#3 (카카오톡 봇 커뮤니티) | 작성자 WaitingLava
 // https://res.cloudinary.com/dnzj9lruv/image/upload/w_800,h_400/colors-gold-thread-600x600_vax2ea
 
 // FileStream.read("/sdcard/경로"); //경로에 있는 파일을 읽습니다.
@@ -19,6 +18,13 @@ const scriptName = "로아봇";
 var loaInfoHtml; //로아 공식홈페이지 전체 크롤링
 var dataWrap = ""; //프로필 정보가 들어있는 변수
 var charName = ""; //캐릭터 이름이 들어있는 변수
+
+var otherChar = "";
+var charItemLv = "";
+var charExpLv = "";
+var charServer = "";
+var charGems = "";
+
 var charImg = ""; //프로필 안의 캐릭터 사진 url이 담겨있는 변수 
 const cloudinary = "https://res.cloudinary.com/dnzj9lruv/image/upload"; //cloudinary url정보
 var enabled = false; //캐릭터가 있는지 없는지 유무 체크용
@@ -32,16 +38,20 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     loaInfoHtml = org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/" + charName[1]).get(); //공식 홈페이지 프로필 html 전체 크롤링
     dataWrap = loaInfoHtml.select("div.content.content--profile"); //전체 html에서 프로필 정보만 추출
     charImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src"); //프로필 안의 캐릭터 사진 url이 담겨있는 변수
+    
+    otherChar = dataWrap.select("ul.profile-character-list__char").select("li").text(); //배럭보여주기 
+    otherChar = otherChar.split(' '); //배럭들 text가 담기는 통
+    otherChar = otherChar.join('\n');
+    charExpLv = dataWrap.select("div.level-info__expedition").text(); //원정대레벨
+    charItemLv = dataWrap.select("div.level-info2__item").text(); //아이템레벨
+    charServer = dataWrap.select("span.profile-character-info__server").text(); //서버이름
+    //level-info__expedition
     //-----------------------------크롤링과 할당부분
 
     //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
     if(charImg.startsWith("http")) enabled = true;
     if(!enabled) {replier.reply("없는 캐릭터 정보입니다."); return;}    
     //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
-
-    //----------------------JSON 파일 형성
-    //dataJSON.imgIndex; //imgIndex는 json 형식이다. dataJSON.imgIndex 이거 자체가 이미 몇 번째 이미지인지 값임
-    //----------------------JSON 파일 형성
 
     //이미지url을 받아서 cloudinary에 업로드------------------
     //replier.reply(dataJSON.imgIndex);
@@ -67,6 +77,19 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
     //replier.reply(dataWrap);
     enabled = false;
+    //-------------------------------------사진보여주기 끝
+    //-------------------------------------정보출력 시작
+    replier.reply(""
+                  +"-----레벨-----"
+                  +charExpLv+ "\n" //원정대레벨
+                  +charItemLv+ "\n" //아이템레벨
+                  +"-----서버-----"
+                  +charServer+ "\n" //서버이름
+                  +"-----보석-----"
+                  +"\n"
+                  +"-----배럭-----"
+                  +otherChar
+                  +"");
   }
   
 }
