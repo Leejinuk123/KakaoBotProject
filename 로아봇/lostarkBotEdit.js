@@ -9,12 +9,17 @@
 // FileStream.append("/sdcard/경로", "데이터") //경로에 데이터를 이어 씁니다.
 // FileStream.remove("/sdcard/경로") //경로를 삭제합니다.
 
-// let data = {
-// 	"ProfileImageHashCode":java.lang.String(ImageDB.getProfileImage()).hashCode()
-// };
 // FileStream.write("/sdcard/DataBase/", JSON.stringify(data))
+// const test = org.jsoup.Jsoup.connect("https://loawa.com/char/우비욱")
+//                                                                     .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
+//                                                                     .ignoreContentType(true)
+//                                                                     .ignoreHttpErrors(true)
+//                                                                     .get();
 
 const scriptName = "로아봇";
+
+var allsee="\u200b".repeat(500);
+
 var loaInfoHtml; //로아 공식홈페이지 전체 크롤링
 var dataWrap = ""; //프로필 정보가 들어있는 변수
 var charName = ""; //캐릭터 이름이 들어있는 변수
@@ -36,12 +41,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     charName = msg.split(" ");
     //-----------------------------크롤링과 할당부분
     loaInfoHtml = org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/" + charName[1]).get(); //공식 홈페이지 프로필 html 전체 크롤링
-    const test = org.jsoup.Jsoup.connect("https://loawa.com/char/우비욱")
-                                                                        .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
-                                                                        .ignoreContentType(true)
-                                                                        .ignoreHttpErrors(true)
-                                                                        .get();
-    replier.reply("test");
     dataWrap = loaInfoHtml.select("div.content.content--profile"); //전체 html에서 프로필 정보만 추출
     charImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src"); //프로필 안의 캐릭터 사진 url이 담겨있는 변수
     
@@ -51,7 +50,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     charExpLv = dataWrap.select("div.level-info__expedition").text(); //원정대레벨
     charItemLv = dataWrap.select("div.level-info2__item").text(); //아이템레벨
     charServer = dataWrap.select("span.profile-character-info__server").text(); //서버이름
-    //level-info__expedition
     //-----------------------------크롤링과 할당부분
 
     //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
@@ -69,11 +67,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                             .data('public_id',"_"+dataJSON.imgIndex)
                             .ignoreContentType(true)
                             .post();
-    // json = JSON.parse(pictureURL.text());
-    // charImg = json.public_id; //사진이름
-    //charImg = cloudinary+"/c_thumb,w_800,h_400,c_fill/c_thumb,w_400,h_400,l_"+ charImg +"/fl_layer_apply,g_north_east,x_0,y_0/l_text:Arial_45_bold:"+ charName[1] +",g_north_west,x_100,y_80,co_rgb:EAEAEA/sasasa_csje7s";
-    //replier.reply(charImg);
-    //charImg = org.jsoup.Jsoup.connect("http://leejinouk123.dothome.co.kr/index.html/?charName="+charName[1]+"&imageLink="+charImg).get();
     
     //php서버에 get방식으로 정보를 전달 후 웹페이지 생성한 다음에 카카오톡으로 링크 전송------------------------------
     replier.reply("http://leejinouk123.dothome.co.kr/index.html/?cN="+charName[1]+"&iL=_"+dataJSON.imgIndex);
@@ -88,9 +81,10 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     replier.reply(""
                   +"-----레벨-----\n"
                   +charExpLv+ "\n" //원정대레벨 //원정대 레벨Lv.162
-                  +charItemLv.substring(3)+ "\n" //아이템레벨 //달성 아이템 레벨Lv.1,543.33
+                  +charItemLv.substring(3)+ "\n" //아이템레벨 //달성 아이템 레벨Lv.1,543.33 -> 아이템 레벨Lv.1,543.33
                   +"-----서버-----\n"
-                  +charServer.substring(1)+ "\n" //서버이름 //@니나브
+                  +charServer.substring(1)+ "\n" //서버이름 //@니나브 -> 니나브
+                  +allsee
                   +"-----보석-----\n"
                   +"\n"
                   +"-----배럭-----\n"
