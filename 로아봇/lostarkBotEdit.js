@@ -9,13 +9,6 @@
 // FileStream.append("/sdcard/경로", "데이터") //경로에 데이터를 이어 씁니다.
 // FileStream.remove("/sdcard/경로") //경로를 삭제합니다.
 
-// FileStream.write("/sdcard/DataBase/", JSON.stringify(data))
-// const test = org.jsoup.Jsoup.connect("https://loawa.com/char/우비욱")
-//                                                                     .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
-//                                                                     .ignoreContentType(true)
-//                                                                     .ignoreHttpErrors(true)
-//                                                                     .get();
-
 const scriptName = "로아봇";
 const LOAREST_API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IktYMk40TkRDSTJ5NTA5NWpjTWk5TllqY2lyZyIsImtpZCI6IktYMk40TkRDSTJ5NTA5NWpjTWk5TllqY2lyZyJ9.eyJpc3MiOiJodHRwczovL2x1ZHkuZ2FtZS5vbnN0b3ZlLmNvbSIsImF1ZCI6Imh0dHBzOi8vbHVkeS5nYW1lLm9uc3RvdmUuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6IjEwMDAwMDAwMDAxNzc2NTIifQ.Rwe6dpgOwbw-16KtuUyGBr6BI4ChWJMwXwC2xokoTWdkcsPM91CXajmz-BeXqLSZTPGCxZ9VMEDuRBMNJHePPWlkvVDmu_1FAuSOtsdPU463TIN61nhQF-GgzhFn5eazLjLBnzeTmCQrcs-zJ8DORn-1wB58ZQr44ZhY-xX4zSngYvyQMCvow6A8y0ccjf1AgOgleJpmiS0mlaaSWADjUb_YGrEnA1O84Kal6SzFUZRU5Mf1GxA_NEeixjatF9kk5nLgx3k0vSipwYhvQ5qif8BGTxm4psOznzWkDH74Z4riLLhWKM33knqynP9DLQMBtC5u5xoHOsYuRB9pBgwMyw";
 const allsee="\u200b".repeat(500); //전체보기
@@ -58,23 +51,25 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     charExpLv = dataWrap.select("div.level-info__expedition").text(); //원정대레벨
     charItemLv = dataWrap.select("div.level-info2__item").text(); //아이템레벨
     charServer = dataWrap.select("span.profile-character-info__server").text(); //서버이름
-    charCard = dataWrap.select("div.card-effect__title").text(); //카드세트
+    charCard = dataWrap.select("ul.card-effect").text(); //카드세트
     //-----------------------------로아웹사이트 크롤링 끝
     
     //로아 API시작---------------------------------
-    const LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/gems")
+    //보석----------------------------------
+    var LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/gems")
                                         .header("Authorization", "bearer " + LOAREST_API_KEY) // Open ai 토큰값 Authorization: bearer {LOAREST_API_KEY}
                                         .header("Content-Type", "application/json")
                                         .ignoreContentType(true)
                                         .ignoreHttpErrors(true)
                                         .get();
-    gemsJSON = JSON.parse(LOSTARKGET.text());
+    var gemsJSON = JSON.parse(LOSTARKGET.text());
     //replier.reply(gemsJSON.Gems[1].Name); //7레벨 홍염의 보석 lostArkGemsAPI.Gems.length -> 11
     //replier.reply(gemsJSON.Effects[gemsJSON.Gems[1].Slot].Name); //섬열난아
-
     for(let i = 0; i < gemsJSON.Gems.length ; i++){
       charGem = charGem + "[" + gemsJSON.Gems[i].Name + "]" + gemsJSON.Effects[gemsJSON.Gems[i].Slot].Name + "\n";
     }
+    //카드------------------------------------
+    replier.reply(charCard);
     //로아 API 끝-----------------------------
 
     
