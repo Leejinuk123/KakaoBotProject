@@ -69,11 +69,11 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                                         .ignoreHttpErrors(true)
                                         .get();
     gemsJSON = JSON.parse(LOSTARKGET.text());
-    replier.reply(gemsJSON.Gems[1].Name); //7레벨 홍염의 보석 lostArkGemsAPI.Gems.length -> 11
-    replier.reply(gemsJSON.Effects[Gems[1].slot].Name); //섬열난아
+    //replier.reply(gemsJSON.Gems[1].Name); //7레벨 홍염의 보석 lostArkGemsAPI.Gems.length -> 11
+    //replier.reply(gemsJSON.Effects[gemsJSON.Gems[1].Slot].Name); //섬열난아
 
-    for(let i = 0; i < lostArkGemsAPI.Gems.length ; i++){
-      charGem = charGem + "[" + gemsJSON.Gems[i].Name + "]" + gemsJSON.Effects[Gems[i].slot].Name + "\n";
+    for(let i = 0; i < gemsJSON.Gems.length ; i++){
+      charGem = charGem + "[" + gemsJSON.Gems[i].Name + "]" + gemsJSON.Effects[gemsJSON.Gems[i].Slot].Name + "\n";
     }
     //로아 API 끝-----------------------------
 
