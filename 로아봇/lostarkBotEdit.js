@@ -80,14 +80,14 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //-------------------------------------사진보여주기 끝
     //-------------------------------------정보출력 시작
     replier.reply(""
-                  +"-----레벨-----"
-                  +charExpLv+ "\n" //원정대레벨
-                  +charItemLv+ "\n" //아이템레벨
-                  +"-----서버-----"
-                  +charServer+ "\n" //서버이름
-                  +"-----보석-----"
+                  +"-----레벨-----\n"
+                  +charExpLv+ "\n" //원정대레벨 //원정대 레벨Lv.162
+                  +charItemLv.substring(3)+ "\n" //아이템레벨 //달성 아이템 레벨Lv.1,543.33
+                  +"-----서버-----\n"
+                  +charServer.substring(1)+ "\n" //서버이름 //@니나브
+                  +"-----보석-----\n"
                   +"\n"
-                  +"-----배럭-----"
+                  +"-----배럭-----\n"
                   +otherChar
                   +"");
   }
