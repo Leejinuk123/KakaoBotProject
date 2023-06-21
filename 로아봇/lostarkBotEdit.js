@@ -36,7 +36,11 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     charName = msg.split(" ");
     //-----------------------------크롤링과 할당부분
     loaInfoHtml = org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/" + charName[1]).get(); //공식 홈페이지 프로필 html 전체 크롤링
-    const test = org.jsoup.Jsoup.connect("https://loawa.com/char/우비욱").userAgent("Mozila/5.0").get();
+    const test = org.jsoup.Jsoup.connect("https://loawa.com/char/우비욱")
+                                                                        .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
+                                                                        .ignoreContentType(true)
+                                                                        .ignoreHttpErrors(true)
+                                                                        .get();
     replier.reply("test");
     dataWrap = loaInfoHtml.select("div.content.content--profile"); //전체 html에서 프로필 정보만 추출
     charImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src"); //프로필 안의 캐릭터 사진 url이 담겨있는 변수
