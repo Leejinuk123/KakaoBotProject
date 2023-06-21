@@ -39,12 +39,19 @@ var charCard = ""; //카드
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   //명령어를 전달받고 로스트아크 공식 홈페이지에서 프로필 정보를 크롤링
   if(msg.startsWith("/로아 ")){
-    charName = msg.split(" ");
-    //-----------------------------크롤링과 할당부분
+    charName = msg.split(" "); //charName[1] -> {캐릭터이름};
+    
+    //-----------------------------크롤링과 할당부분 시작
     loaInfoHtml = org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/" + charName[1]).get(); //공식 홈페이지 프로필 html 전체 크롤링
     dataWrap = loaInfoHtml.select("div.content.content--profile"); //전체 html에서 프로필 정보만 추출
     
     charImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src"); //프로필 안의 캐릭터 사진 url이 담겨있는 변수
+
+    //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
+    if(charImg.startsWith("http")) enabled = true;
+    if(!enabled) {replier.reply("없는 캐릭터 정보입니다."); return;}    //없으면 종료 있으면 아래로 진행
+    //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
+    
     otherChar = dataWrap.select("ul.profile-character-list__char").select("li").text(); //배럭보여주기 
     otherChar = otherChar.split(' '); //배럭들 text가 담기는 통
     otherChar = otherChar.join('\n');
@@ -52,24 +59,25 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     charItemLv = dataWrap.select("div.level-info2__item").text(); //아이템레벨
     charServer = dataWrap.select("span.profile-character-info__server").text(); //서버이름
     charCard = dataWrap.select("div.card-effect__title").text(); //카드세트
-    //charGem = ""; //보석
-    //Effects[Gems[0].slot].Name = 섬열난아;
-    //Gems[0].Name = 7레벨 홍염 보석;
-    //로아웹사이트 크롤링
+    //-----------------------------로아웹사이트 크롤링 끝
+    
     //로아 API시작---------------------------------
-    const test = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/gems")
+    const LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/gems")
                                         .header("Authorization", "bearer " + LOAREST_API_KEY) // Open ai 토큰값 Authorization: bearer {LOAREST_API_KEY}
                                         .header("Content-Type", "application/json")
                                         .ignoreContentType(true)
                                         .ignoreHttpErrors(true)
                                         .get();
-    replier.reply(test);
-    //-----------------------------크롤링과 할당부분
+    gemsJSON = JSON.parse(LOSTARKGET.text());
+    replier.reply(gemsJSON.Gems[1].Name); //7레벨 홍염의 보석 lostArkGemsAPI.Gems.length -> 11
+    replier.reply(gemsJSON.Effects[Gems[1].slot].Name); //섬열난아
 
-    //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
-    if(charImg.startsWith("http")) enabled = true;
-    if(!enabled) {replier.reply("없는 캐릭터 정보입니다."); return;}    
-    //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
+    for(let i = 0; i < lostArkGemsAPI.Gems.length ; i++){
+      charGem = charGem + "[" + gemsJSON.Gems[i].Name + "]" + gemsJSON.Effects[Gems[i].slot].Name + "\n";
+    }
+    //로아 API 끝-----------------------------
+
+    
 
     //이미지url을 받아서 cloudinary에 업로드------------------
     //replier.reply(dataJSON.imgIndex);
@@ -100,7 +108,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                   +charServer.substring(1)+ "\n" //서버이름 //@니나브 -> 니나브
                   +allsee
                   +"-----보석-----\n"
-                  +"\n"
+                  +charGem
                   +"-----카드-----\n"
                   +"\n"
                   +"-----배럭-----\n"
