@@ -17,23 +17,24 @@
 //                                                                     .get();
 
 const scriptName = "로아봇";
-
-var allsee="\u200b".repeat(500);
+const LOAREST_API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IktYMk40TkRDSTJ5NTA5NWpjTWk5TllqY2lyZyIsImtpZCI6IktYMk40TkRDSTJ5NTA5NWpjTWk5TllqY2lyZyJ9.eyJpc3MiOiJodHRwczovL2x1ZHkuZ2FtZS5vbnN0b3ZlLmNvbSIsImF1ZCI6Imh0dHBzOi8vbHVkeS5nYW1lLm9uc3RvdmUuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6IjEwMDAwMDAwMDAxNzc2NTIifQ.Rwe6dpgOwbw-16KtuUyGBr6BI4ChWJMwXwC2xokoTWdkcsPM91CXajmz-BeXqLSZTPGCxZ9VMEDuRBMNJHePPWlkvVDmu_1FAuSOtsdPU463TIN61nhQF-GgzhFn5eazLjLBnzeTmCQrcs-zJ8DORn-1wB58ZQr44ZhY-xX4zSngYvyQMCvow6A8y0ccjf1AgOgleJpmiS0mlaaSWADjUb_YGrEnA1O84Kal6SzFUZRU5Mf1GxA_NEeixjatF9kk5nLgx3k0vSipwYhvQ5qif8BGTxm4psOznzWkDH74Z4riLLhWKM33knqynP9DLQMBtC5u5xoHOsYuRB9pBgwMyw";
+const allsee="\u200b".repeat(500); //전체보기
+const cloudinary = "https://res.cloudinary.com/dnzj9lruv/image/upload"; //cloudinary url정보
+var dataJSON = JSON.parse(FileStream.read("/sdcard/imgIndex.json")); //경로에 있는 파일을 읽습니다. 읽어서 imgNumber라는 변수에 몇 번째 사진인지 할당  JSON.parse(FileStream.read(path));
+var enabled = false; //캐릭터가 있는지 없는지 유무 체크용
 
 var loaInfoHtml; //로아 공식홈페이지 전체 크롤링
 var dataWrap = ""; //프로필 정보가 들어있는 변수
+
 var charName = ""; //캐릭터 이름이 들어있는 변수
-
-var otherChar = "";
-var charItemLv = "";
-var charExpLv = "";
-var charServer = "";
-var charGems = "";
-
 var charImg = ""; //프로필 안의 캐릭터 사진 url이 담겨있는 변수 
-const cloudinary = "https://res.cloudinary.com/dnzj9lruv/image/upload"; //cloudinary url정보
-var enabled = false; //캐릭터가 있는지 없는지 유무 체크용
-var dataJSON = JSON.parse(FileStream.read("/sdcard/imgIndex.json")); //경로에 있는 파일을 읽습니다. 읽어서 imgNumber라는 변수에 몇 번째 사진인지 할당  JSON.parse(FileStream.read(path));
+var otherChar = ""; //배럭
+var charItemLv = ""; //아이템레벨
+var charExpLv = ""; //원정대레벨
+var charServer = ""; //서버이름
+var charGem = ""; //보석
+var charCard = ""; //카드
+
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   //명령어를 전달받고 로스트아크 공식 홈페이지에서 프로필 정보를 크롤링
@@ -42,14 +43,27 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //-----------------------------크롤링과 할당부분
     loaInfoHtml = org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/" + charName[1]).get(); //공식 홈페이지 프로필 html 전체 크롤링
     dataWrap = loaInfoHtml.select("div.content.content--profile"); //전체 html에서 프로필 정보만 추출
-    charImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src"); //프로필 안의 캐릭터 사진 url이 담겨있는 변수
     
+    charImg = dataWrap.select("div.profile-equipment__character").select("img").attr("src"); //프로필 안의 캐릭터 사진 url이 담겨있는 변수
     otherChar = dataWrap.select("ul.profile-character-list__char").select("li").text(); //배럭보여주기 
     otherChar = otherChar.split(' '); //배럭들 text가 담기는 통
     otherChar = otherChar.join('\n');
     charExpLv = dataWrap.select("div.level-info__expedition").text(); //원정대레벨
     charItemLv = dataWrap.select("div.level-info2__item").text(); //아이템레벨
     charServer = dataWrap.select("span.profile-character-info__server").text(); //서버이름
+    charCard = dataWrap.select("div.card-effect__title").text(); //카드세트
+    //charGem = ""; //보석
+    //Effects[Gems[0].slot].Name = 섬열난아;
+    //Gems[0].Name = 7레벨 홍염 보석;
+    //로아웹사이트 크롤링
+    //로아 API시작---------------------------------
+    const test = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/gems")
+                                        .header("Authorization", "bearer " + LOAREST_API_KEY) // Open ai 토큰값 Authorization: bearer {LOAREST_API_KEY}
+                                        .header("Content-Type", "application/json")
+                                        .ignoreContentType(true)
+                                        .ignoreHttpErrors(true)
+                                        .get();
+    replier.reply(test);
     //-----------------------------크롤링과 할당부분
 
     //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
@@ -86,6 +100,8 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                   +charServer.substring(1)+ "\n" //서버이름 //@니나브 -> 니나브
                   +allsee
                   +"-----보석-----\n"
+                  +"\n"
+                  +"-----카드-----\n"
                   +"\n"
                   +"-----배럭-----\n"
                   +otherChar
