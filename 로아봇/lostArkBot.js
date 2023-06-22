@@ -57,12 +57,14 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                                         .ignoreHttpErrors(true)
                                         .get();
     let gemsJSON = JSON.parse(LOSTARKGET.text());
-    for(let i = 0; i < gemsJSON.Gems.length ; i++){
-      charGem = charGem + "[" + gemsJSON.Gems[i].Name + "] ";
-      for(let j = 0; j < gemsJSON.Gems.length ; j ++){
-        if(gemsJSON.Gems[i].Slot == gemsJSON.Effects[j].GemSlot) charGem = charGem + gemsJSON.Effects[j].Name + "\n";
+    if(gemsJSON != null){
+      for(let i = 0; i < gemsJSON.Gems.length ; i++){
+        charGem = charGem + "[" + gemsJSON.Gems[i].Name + "] ";
+        for(let j = 0; j < gemsJSON.Gems.length ; j ++){
+          if(gemsJSON.Gems[i].Slot == gemsJSON.Effects[j].GemSlot) charGem = charGem + gemsJSON.Effects[j].Name + "\n";
+        }
       }
-    }
+    } else if(gemsJSON == null){charGem = "장착 중인 보석이 없습니다.\n";}
     //카드------------------------------------
     let charCard = ""; //카드
     LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/cards")
@@ -72,12 +74,14 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                                         .ignoreHttpErrors(true)
                                         .get();
     let cardJSON = JSON.parse(LOSTARKGET.text());
-    for(let i = 0 ; i < cardJSON.Effects.length ; i++ ){
-      for(let j = 0 ; j < cardJSON.Effects[i].Items.length ; j++ ){
-        charCard = charCard + cardJSON.Effects[i].Items[j].Name + "\n " + cardJSON.Effects[i].Items[j].Description + "\n";
+    if(cardJSON != null){
+      for(let i = 0 ; i < cardJSON.Effects.length ; i++ ){
+        for(let j = 0 ; j < cardJSON.Effects[i].Items.length ; j++ ){
+          charCard = charCard + cardJSON.Effects[i].Items[j].Name + "\n " + cardJSON.Effects[i].Items[j].Description + "\n";
+        }
+        if(i != cardJSON.Effects.length) charCard = charCard + "\n";
       }
-      if(i != cardJSON.Effects.length) charCard = charCard + "\n";
-    }
+    } else if(cardJSON == null){charCard = "장착 중인 카드가 없습니다.\n";}
     //배럭------------------------------------
     let charList = ""; //배럭
     LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/characters/"+charName[1]+"/siblings")
