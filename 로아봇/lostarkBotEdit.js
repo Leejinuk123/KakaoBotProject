@@ -25,8 +25,8 @@ var otherChar = ""; //배럭
 var charItemLv = ""; //아이템레벨
 var charExpLv = ""; //원정대레벨
 var charServer = ""; //서버이름
-var charGem = ""; //보석
-var charCard = ""; //카드
+//var charGem = ""; //보석
+//var charCard = ""; //카드
 
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
@@ -57,13 +57,13 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //로아 API시작---------------------------------
     //보석----------------------------------
     let charGem = ""; //보석
-    var LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/gems")
+    let LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/gems")
                                         .header("Authorization", "bearer " + LOAREST_API_KEY) // Open ai 토큰값 Authorization: bearer {LOAREST_API_KEY}
                                         .header("Content-Type", "application/json")
                                         .ignoreContentType(true)
                                         .ignoreHttpErrors(true)
                                         .get();
-    var gemsJSON = JSON.parse(LOSTARKGET.text());
+    let gemsJSON = JSON.parse(LOSTARKGET.text());
     //replier.reply(gemsJSON.Gems[1].Name); //7레벨 홍염의 보석 lostArkGemsAPI.Gems.length -> 11
     //replier.reply(gemsJSON.Effects[gemsJSON.Gems[1].Slot].Name); //섬열난아
     //replier.reply(gemsJSON.Gems.length);
@@ -77,6 +77,22 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       //gemsJSON.Gems[0].Slot = 0, Effects에 gemsSlot이 0번인덱스가 아니라 , 그냥 Effects의 0번 인덱스가 출력이 된다.
     }
     //카드------------------------------------
+    let charCard = ""; //카드
+    let LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/card")
+                                        .header("Authorization", "bearer " + LOAREST_API_KEY) // Open ai 토큰값 Authorization: bearer {LOAREST_API_KEY}
+                                        .header("Content-Type", "application/json")
+                                        .ignoreContentType(true)
+                                        .ignoreHttpErrors(true)
+                                        .get();
+    let cardJSON = JSON.parse(LOSTARKGET.text());
+    for(let i = 0 ; i < cardJSON.Effects.length ; i++ ){
+      for(let j = 0 ; j < cardJSON.Effects[i].Items.length ; j++ ){
+        charCard = charCard + cardJSON.Effects[i].Items[j].Name + "\n" + cardJSON.Effects[i].Items[j].Description + "\n";
+      }
+    }
+    //charCard = charCard + cardJSON.Effects[i].Items[i].Name
+    //cardJSON.Effects[i].Items[i].Name -> 카드세트 이름
+    //cardJSON.Effects[i].Items[i].Description -> 카드효과 설명
     //replier.reply(charCard);
     //로아 API 끝-----------------------------
 
