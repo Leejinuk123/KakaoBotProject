@@ -91,7 +91,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                                         .get();
     let charJSON = JSON.parse(LOSTARKGET.text());
     for(let i = 0 ; i < charJSON.length ; i++){
-      charList = charList + "[" + charJSON[i].ServerName + "/" + charJSON[i].CharacterClassName + "]" + charJSON[i].CharacterName + " Lv." + charJSON[i].ItemMaxLevel + "\n";
+      charList = charList + "[" + charJSON[i].ServerName + "/" + charJSON[i].CharacterClassName + "/" + charJSON[i].ItemMaxLevel + "]" + charJSON[i].CharacterName + "\n";
     }
     //로아 API 끝-----------------------------
     
