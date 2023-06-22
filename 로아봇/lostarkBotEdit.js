@@ -21,12 +21,10 @@ var dataWrap = ""; //프로필 정보가 들어있는 변수
 
 var charName = ""; //캐릭터 이름이 들어있는 변수
 var charImg = ""; //프로필 안의 캐릭터 사진 url이 담겨있는 변수 
-var otherChar = ""; //배럭
 var charItemLv = ""; //아이템레벨
 var charExpLv = ""; //원정대레벨
 var charServer = ""; //서버이름
-//var charGem = ""; //보석
-//var charCard = ""; //카드
+// var otherChar = ""; //배럭
 
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
@@ -45,13 +43,12 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     if(!enabled) {replier.reply("없는 캐릭터 정보입니다."); return;}    //없으면 종료 있으면 아래로 진행
     //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
     
-    otherChar = dataWrap.select("ul.profile-character-list__char").select("li").text(); //배럭보여주기 
-    otherChar = otherChar.split(' '); //배럭들 text가 담기는 통
-    otherChar = otherChar.join('\n');
+    // otherChar = dataWrap.select("ul.profile-character-list__char").select("li").text(); //배럭보여주기 
+    // otherChar = otherChar.split(' '); //배럭들 text가 담기는 통
+    // otherChar = otherChar.join('\n');
     charExpLv = dataWrap.select("div.level-info__expedition").text(); //원정대레벨
     charItemLv = dataWrap.select("div.level-info2__item").text(); //아이템레벨
     charServer = dataWrap.select("span.profile-character-info__server").text(); //서버이름
-    charCard = dataWrap.select("ul.card-effect").text(); //카드세트
     //-----------------------------로아웹사이트 크롤링 끝
     
     //로아 API시작---------------------------------
@@ -64,21 +61,15 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                                         .ignoreHttpErrors(true)
                                         .get();
     let gemsJSON = JSON.parse(LOSTARKGET.text());
-    //replier.reply(gemsJSON.Gems[1].Name); //7레벨 홍염의 보석 lostArkGemsAPI.Gems.length -> 11
-    //replier.reply(gemsJSON.Effects[gemsJSON.Gems[1].Slot].Name); //섬열난아
-    //replier.reply(gemsJSON.Gems.length);
     for(let i = 0; i < gemsJSON.Gems.length ; i++){
       charGem = charGem + "[" + gemsJSON.Gems[i].Name + "]"; //앞에는 그냥 Gems의 0번인덱스를 갖고옴
       for(let j = 0; j < gemsJSON.Gems.length ; j ++){
         if(gemsJSON.Gems[i].Slot == gemsJSON.Effects[j].GemSlot) charGem = charGem + gemsJSON.Effects[j].Name + "\n";
       }
-      //근데 0번인덱스가 0번 slot에 있다고는 장담못함. 그래서 Gems의 0번인덱스의 보석의 slot이 Effects의 gemsSlot의 위치와 같아야 같은 보석임.
-      //gemsJSON.Gems[0].Name : 7레벨 홍염(실제로는 천축임) gemsJSON.Effects[gemsJSON.Gems[0].Slot].Name : 빛의 충격임 ( 원랜 천축이 나와야함 )
-      //gemsJSON.Gems[0].Slot = 0, Effects에 gemsSlot이 0번인덱스가 아니라 , 그냥 Effects의 0번 인덱스가 출력이 된다.
     }
     //카드------------------------------------
     let charCard = ""; //카드
-    let LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/card")
+    LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/cards")
                                         .header("Authorization", "bearer " + LOAREST_API_KEY) // Open ai 토큰값 Authorization: bearer {LOAREST_API_KEY}
                                         .header("Content-Type", "application/json")
                                         .ignoreContentType(true)
@@ -90,14 +81,20 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
         charCard = charCard + cardJSON.Effects[i].Items[j].Name + "\n" + cardJSON.Effects[i].Items[j].Description + "\n";
       }
     }
-    //charCard = charCard + cardJSON.Effects[i].Items[i].Name
-    //cardJSON.Effects[i].Items[i].Name -> 카드세트 이름
-    //cardJSON.Effects[i].Items[i].Description -> 카드효과 설명
-    //replier.reply(charCard);
+    //배럭------------------------------------
+    let charList = ""; //배럭
+    LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/characters/"+charName[1]+"/siblings")
+                                        .header("Authorization", "bearer " + LOAREST_API_KEY) // Open ai 토큰값 Authorization: bearer {LOAREST_API_KEY}
+                                        .header("Content-Type", "application/json")
+                                        .ignoreContentType(true)
+                                        .ignoreHttpErrors(true)
+                                        .get();
+    let charJSON = JSON.parse(LOSTARKGET.text());
+    for(let i = 0 ; i < charJSON.length ; i++){
+      charList = charList + "[" + charJSON[i].ServerName + "/" + charJSON[i].CharacterClassName + "]" + charJSON[i].CharacterName + " Lv." + charJSON[i].ItemMaxLevel + "\n";
+    }
     //로아 API 끝-----------------------------
-
     
-
     //이미지url을 받아서 cloudinary에 업로드------------------
     //replier.reply(dataJSON.imgIndex);
     dataJSON.imgIndex = dataJSON.imgIndex + 1;
@@ -120,18 +117,17 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //-------------------------------------사진보여주기 끝
     //-------------------------------------정보출력 시작
     replier.reply(""
-                  +"-----레벨-----\n"
+                  +"-----간략-----\n"
+                  +charServer.substring(1)+ "\n" //서버이름 //@니나브 -> 니나브
                   +charExpLv+ "\n" //원정대레벨 //원정대 레벨Lv.162
                   +charItemLv.substring(3)+ "\n" //아이템레벨 //달성 아이템 레벨Lv.1,543.33 -> 아이템 레벨Lv.1,543.33
-                  +"-----서버-----\n"
-                  +charServer.substring(1)+ "\n" //서버이름 //@니나브 -> 니나브
                   +allsee
                   +"-----보석-----\n"
                   +charGem
                   +"-----카드-----\n"
                   +charCard
-                  +"\n-----배럭-----\n"
-                  +otherChar
+                  +"-----배럭-----\n"
+                  +charList
                   +"");
   }
   
