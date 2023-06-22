@@ -76,7 +76,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       for(let j = 0 ; j < cardJSON.Effects[i].Items.length ; j++ ){
         charCard = charCard + cardJSON.Effects[i].Items[j].Name + "\n " + cardJSON.Effects[i].Items[j].Description + "\n";
       }
-      if(i != cardJSON.Effects.length) charCard = charCard + "\n";
     }
     //배럭------------------------------------
     let charList = ""; //배럭
@@ -120,11 +119,11 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                   +charExpLv+ "\n" //원정대레벨 //원정대 레벨Lv.162
                   +charItemLv.substring(3)+ "\n" //아이템레벨 //달성 아이템 레벨Lv.1,543.33 -> 아이템 레벨Lv.1,543.33
                   +allsee
-                  +"-----보석-----\n"
+                  +"\n-----보석-----\n"
                   +charGem
-                  +"-----카드-----\n"
+                  +"\n-----카드-----\n"
                   +charCard
-                  +"-----배럭-----\n"
+                  +"\n-----배럭-----\n"
                   +charList
                   +"");
   }
