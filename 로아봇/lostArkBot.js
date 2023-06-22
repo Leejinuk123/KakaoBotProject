@@ -108,7 +108,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                             .post();
     
     //php서버에 get방식으로 정보를 전달 후 웹페이지 생성한 다음에 카카오톡으로 링크 전송------------------------------
-    replier.reply("http://leejinouk123.dothome.co.kr/index.html/?cN="+charName[1]+"&iL=_"+dataJSON.imgIndex);
+    replier.reply("http://loa.dothome.co.kr/index.html/?cN="+charName[1]+"&iL=_"+dataJSON.imgIndex);
     FileStream.write("/sdcard/imgIndex.json", JSON.stringify(dataJSON));
     //const sendHtml = org.jsoup.Jsoup.connect("");
     
