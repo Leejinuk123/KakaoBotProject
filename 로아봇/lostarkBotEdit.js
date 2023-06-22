@@ -65,8 +65,15 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     var gemsJSON = JSON.parse(LOSTARKGET.text());
     //replier.reply(gemsJSON.Gems[1].Name); //7레벨 홍염의 보석 lostArkGemsAPI.Gems.length -> 11
     //replier.reply(gemsJSON.Effects[gemsJSON.Gems[1].Slot].Name); //섬열난아
+    replier.reply(gemsJSON.Gems.length);
     for(let i = 0; i < gemsJSON.Gems.length ; i++){
-      charGem = charGem + "[" + gemsJSON.Gems[i].Name + "]" + gemsJSON.Effects[gemsJSON.Gems[i].Slot].Name + "\n";
+      charGem = charGem + "[" + gemsJSON.Gems[i].Name + "]"; //앞에는 그냥 Gems의 0번인덱스를 갖고옴
+      for(let j = 0; i < gemsJSON.Gems.length ; j ++){
+        if(gemsJSON.Gems[i].Slot == gemsJSON.Effects[j].GemsSlot) = charGem = charGem + gemsJSON.Effects[j].Name + "\n";
+      }
+      //근데 0번인덱스가 0번 slot에 있다고는 장담못함. 그래서 Gems의 0번인덱스의 보석의 slot이 Effects의 gemsSlot의 위치와 같아야 같은 보석임.
+      //gemsJSON.Gems[0].Name : 7레벨 홍염(실제로는 천축임) gemsJSON.Effects[gemsJSON.Gems[0].Slot].Name : 빛의 충격임 ( 원랜 천축이 나와야함 )
+      //gemsJSON.Gems[0].Slot = 0, Effects에 gemsSlot이 0번인덱스가 아니라 , 그냥 Effects의 0번 인덱스가 출력이 된다.
     }
     //카드------------------------------------
     replier.reply(charCard);
