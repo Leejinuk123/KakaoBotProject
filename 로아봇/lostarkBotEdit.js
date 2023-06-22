@@ -24,7 +24,6 @@ var charImg = ""; //프로필 안의 캐릭터 사진 url이 담겨있는 변수
 var charItemLv = ""; //아이템레벨
 var charExpLv = ""; //원정대레벨
 var charServer = ""; //서버이름
-// var otherChar = ""; //배럭
 
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
@@ -43,9 +42,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     if(!enabled) {replier.reply("없는 캐릭터 정보입니다."); return;}    //없으면 종료 있으면 아래로 진행
     //캐릭터가 있는지없는지 검사------------------------------------------------------------------------------
     
-    // otherChar = dataWrap.select("ul.profile-character-list__char").select("li").text(); //배럭보여주기 
-    // otherChar = otherChar.split(' '); //배럭들 text가 담기는 통
-    // otherChar = otherChar.join('\n');
     charExpLv = dataWrap.select("div.level-info__expedition").text(); //원정대레벨
     charItemLv = dataWrap.select("div.level-info2__item").text(); //아이템레벨
     charServer = dataWrap.select("span.profile-character-info__server").text(); //서버이름
@@ -62,7 +58,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                                         .get();
     let gemsJSON = JSON.parse(LOSTARKGET.text());
     for(let i = 0; i < gemsJSON.Gems.length ; i++){
-      charGem = charGem + "[" + gemsJSON.Gems[i].Name + "]"; //앞에는 그냥 Gems의 0번인덱스를 갖고옴
+      charGem = charGem + "[" + gemsJSON.Gems[i].Name + "] ";
       for(let j = 0; j < gemsJSON.Gems.length ; j ++){
         if(gemsJSON.Gems[i].Slot == gemsJSON.Effects[j].GemSlot) charGem = charGem + gemsJSON.Effects[j].Name + "\n";
       }
@@ -70,7 +66,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //카드------------------------------------
     let charCard = ""; //카드
     LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/"+charName[1]+"/cards")
-                                        .header("Authorization", "bearer " + LOAREST_API_KEY) // Open ai 토큰값 Authorization: bearer {LOAREST_API_KEY}
+                                        .header("Authorization", "bearer " + LOAREST_API_KEY)
                                         .header("Content-Type", "application/json")
                                         .ignoreContentType(true)
                                         .ignoreHttpErrors(true)
@@ -78,20 +74,21 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     let cardJSON = JSON.parse(LOSTARKGET.text());
     for(let i = 0 ; i < cardJSON.Effects.length ; i++ ){
       for(let j = 0 ; j < cardJSON.Effects[i].Items.length ; j++ ){
-        charCard = charCard + cardJSON.Effects[i].Items[j].Name + "\n" + cardJSON.Effects[i].Items[j].Description + "\n";
+        charCard = charCard + cardJSON.Effects[i].Items[j].Name + "\n " + cardJSON.Effects[i].Items[j].Description + "\n";
       }
+      if(i != cardJSON.Effects.length) charCard = charCard + "\n";
     }
     //배럭------------------------------------
     let charList = ""; //배럭
     LOSTARKGET = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/characters/"+charName[1]+"/siblings")
-                                        .header("Authorization", "bearer " + LOAREST_API_KEY) // Open ai 토큰값 Authorization: bearer {LOAREST_API_KEY}
+                                        .header("Authorization", "bearer " + LOAREST_API_KEY)
                                         .header("Content-Type", "application/json")
                                         .ignoreContentType(true)
                                         .ignoreHttpErrors(true)
                                         .get();
     let charJSON = JSON.parse(LOSTARKGET.text());
     for(let i = 0 ; i < charJSON.length ; i++){
-      charList = charList + "[" + charJSON[i].ServerName + "/" + charJSON[i].CharacterClassName + "/" + charJSON[i].ItemMaxLevel + "]" + charJSON[i].CharacterName + "\n";
+      charList = charList + "[" + charJSON[i].ServerName + "/" + charJSON[i].CharacterClassName + "/" + charJSON[i].ItemMaxLevel + "] " + charJSON[i].CharacterName + "\n";
     }
     //로아 API 끝-----------------------------
     
@@ -115,6 +112,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //replier.reply(dataWrap);
     enabled = false;
     //-------------------------------------사진보여주기 끝
+    
     //-------------------------------------정보출력 시작
     replier.reply(""
                   +"-----간략-----\n"
