@@ -5,16 +5,14 @@
 const scriptName = "뉴로아봇v0.1";
 const LOSTARK_API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IktYMk40TkRDSTJ5NTA5NWpjTWk5TllqY2lyZyIsImtpZCI6IktYMk40TkRDSTJ5NTA5NWpjTWk5TllqY2lyZyJ9.eyJpc3MiOiJodHRwczovL2x1ZHkuZ2FtZS5vbnN0b3ZlLmNvbSIsImF1ZCI6Imh0dHBzOi8vbHVkeS5nYW1lLm9uc3RvdmUuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6IjEwMDAwMDAwMDAxNzc2NTIifQ.Rwe6dpgOwbw-16KtuUyGBr6BI4ChWJMwXwC2xokoTWdkcsPM91CXajmz-BeXqLSZTPGCxZ9VMEDuRBMNJHePPWlkvVDmu_1FAuSOtsdPU463TIN61nhQF-GgzhFn5eazLjLBnzeTmCQrcs-zJ8DORn-1wB58ZQr44ZhY-xX4zSngYvyQMCvow6A8y0ccjf1AgOgleJpmiS0mlaaSWADjUb_YGrEnA1O84Kal6SzFUZRU5Mf1GxA_NEeixjatF9kk5nLgx3k0vSipwYhvQ5qif8BGTxm4psOznzWkDH74Z4riLLhWKM33knqynP9DLQMBtC5u5xoHOsYuRB9pBgwMyw";
 const allsee = "\u200b".repeat(500); //전체보기
-// const cloudinary = "https://res.cloudinary.com/dnzj9lruv/image/upload"; //cloudinary url정보
-// var dataJSON = JSON.parse(FileStream.read("/sdcard/imgIndex.json")); //경로에 있는 파일을 읽습니다. 읽어서 imgNumber라는 변수에 몇 번째 사진인지 할당  JSON.parse(FileStream.read(path));
-var enabled = false; //캐릭터가 있는지 없는지 유무 체크용
-
-var characterName = ""; //캐릭터 이름이 들어있는 변수
+const cloudinary = "https://res.cloudinary.com/dnzj9lruv/image/upload"; //cloudinary url정보
+var dataJSON = JSON.parse(FileStream.read("/sdcard/imgIndex.json")); //경로에 있는 파일을 읽습니다. 읽어서 imgNumber라는 변수에 몇 번째 사진인지 할당  JSON.parse(FileStream.read(path));
 
 //---------------------
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   //명령어를 전달받고 로스트아크 공식 홈페이지에서 프로필 정보를 크롤링
   if(msg.startsWith("/정보 ")){
+    let characterName = ""; //캐릭터 이름이 들어있는 변수
     characterName = msg.split(" "); characterName = characterName[1];
 
     let characterProfile = getJson(characterName,"profiles");
@@ -87,7 +85,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                           + "체공 : " + HPAD + "\n"
                           + "각인 : " + engravings + "\n"
                           + "카드 : " + cards + "\n"
-                          + "-----자세히보기-----"
+                          + "\n보석과 배럭 정보는 전체보기를 눌러주세요!\n"
                           + allsee
                           + "보석 : \n" + gems + "\n"
                           + "배럭 : \n" + siblings + "\n"
@@ -95,27 +93,18 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //로아 API 끝-----------------------------
     
     //이미지url을 받아서 cloudinary에 업로드------------------
-    //replier.reply(dataJSON.imgIndex);
-    // dataJSON.imgIndex = dataJSON.imgIndex + 1;
-    // const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
-    // const pictureURL = 
-    //                 con.data('file',charImg)
-    //                         .data('upload_preset','xyiuwpkw')
-    //                         .data('public_id',"_"+dataJSON.imgIndex)
-    //                         .ignoreContentType(true)
-    //                         .post();
-    
-    // //php서버에 get방식으로 정보를 전달 후 웹페이지 생성한 다음에 카카오톡으로 링크 전송------------------------------
-    // replier.reply("http://loa.dothome.co.kr/index.html/?cN="+charName[1]+"&iL=_"+dataJSON.imgIndex);
-    // FileStream.write("/sdcard/imgIndex.json", JSON.stringify(dataJSON));
-    // //const sendHtml = org.jsoup.Jsoup.connect("");
-    
-    // //json = JSON.parse(dataWrap.text()); //html 형식의 파일을 json으로 파싱
-    // //replier.reply(dataWrap);
-    // enabled = false;
-    //-------------------------------------사진보여주기 끝
-    
-    //-------------------------------------정보출력 시작
+    replier.reply(dataJSON.imgIndex);
+    dataJSON.imgIndex = dataJSON.imgIndex + 1;
+    const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
+    const pictureURL = 
+                    con.data('file',charImg)
+                            .data('upload_preset','xyiuwpkw')
+                            .data('public_id',"_"+dataJSON.imgIndex)
+                            .ignoreContentType(true)
+                            .post();
+    replier.reply("http://loa.dothome.co.kr/index.html/?cN="+charName[1]+"&iL=_"+dataJSON.imgIndex);
+    FileStream.write("/sdcard/imgIndex.json", JSON.stringify(dataJSON));
+    -------------------------------------정보출력 시작
     replier.reply(profileMessageOut);
   }
   
