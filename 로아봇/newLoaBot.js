@@ -93,11 +93,11 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     //로아 API 끝-----------------------------
     
     //이미지url을 받아서 cloudinary에 업로드------------------
-    replier.reply(dataJSON.imgIndex);
+    //replier.reply(dataJSON.imgIndex);
     dataJSON.imgIndex = dataJSON.imgIndex + 1;
     const con = org.jsoup.Jsoup.connect("https://api.cloudinary.com/v1_1/dnzj9lruv/image/upload");
     const pictureURL = 
-                    con.data('file',charImg)
+                    con.data('file',characterProfile.CharacterImage)
                             .data('upload_preset','xyiuwpkw')
                             .data('public_id',"_"+dataJSON.imgIndex)
                             .ignoreContentType(true)
