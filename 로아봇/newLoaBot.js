@@ -18,9 +18,11 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     characterName = msg.split(" "); characterName = characterName[1];
 
     let characterProfile = getJson(characterName,"profiles");
-    if(characterProfile == null||characterProfile.CharacterImage == null) {replire.reply("없거나 휴면 캐릭터인 정보입니다."); return;}
+    if(characterProfile == null||characterProfile.CharacterImage == null) {replier.reply("없거나 휴면 캐릭터인 정보입니다."); return;}
     let characterEngravings = getJson(characterName,"engravings");
     let characterCards = getJson(characterName,"cards");
+    let characterGems = getJson(characterName,"gems");
+    let characterSiblings = getJsonSiblings(characterName, "siblings");
     //테스트후보군 :  배마욱, 우비욱, 근브렐유지캐릭터
     //템렙(),전투렙(),원대렙()
     //길드(서버)
@@ -43,7 +45,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       for(let i = 0 ; i < characterEngravings.Effects.length ; i++){
         engravings = engravings + characterEngravings.Effects[i].Name + " ";
       }
-      engravings = engravings.replace(" Lv. ","");
+      engravings = engravings.replace(/ Lv. /g,""); //정규식 사용 전체 제거
     }
     //카드(세트이름만)
     if(characterCards == null) var cards = "-";
@@ -55,36 +57,42 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
           cardsIndex = characterCards.Effects[i].Items[j].Name;
         }
         cards = cards + cardsIndex + " ";
+        cardsIndex = "";
+      }
+    }
+    //보석----------------------------------
+    if(characterGems == null) var gems = "-";
+    else {
+      var gems = "";
+      for(let i = 0; i < characterGems.Gems.length ; i++){
+        gems = gems + "[" + characterGems.Gems[i].Name + "] ";
+        for(let j = 0; j < characterGems.Gems.length ; j ++){
+          if(characterGems.Gems[i].Slot == characterGems.Effects[j].GemSlot) gems = gems + characterGems.Effects[j].Name + "\n";
+        }
+      }
+    }
+    //배럭------------------------------------
+    if(characterSiblings == null) var siblings = "-";
+    else {
+      var siblings = ""; //배럭
+      for(let i = 0 ; i < characterSiblings.length ; i++){
+        siblings = siblings + "[" + characterSiblings[i].ServerName + "/" + characterSiblings[i].CharacterClassName + "/" + characterSiblings[i].ItemMaxLevel + "] " + characterSiblings[i].CharacterName + "\n";
       }
     }
 
     //메세지출력폼
     let profileMessageOut = "장비" + "(" + characterProfile.ItemAvgLevel + ") 전투(" + characterProfile.CharacterLevel + ") 원정대(" + characterProfile.ExpeditionLevel + ")" + "\n"
-                          + "길드 " + guildName + "(" + characterProfile.ServerName + ")" + "\n"
-                          + "특성 " + stats + "\n"
-                          + "체공 " + HPAD + "\n"
-                          + "각인 " + engravings + "\n"
-                          + "카드 " + cards + "\n"
+                          + "길드 : " + guildName + "(" + characterProfile.ServerName + ")" + "\n"
+                          + "특성 : " + stats + "\n"
+                          + "체공 : " + HPAD + "\n"
+                          + "각인 : " + engravings + "\n"
+                          + "카드 : " + cards + "\n"
                           + "-----자세히보기-----"
-                          + allsee;
+                          + allsee
+                          + "보석 : \n" + gems + "\n"
+                          + "배럭 : \n" + siblings + "\n"
+                          + ""; 
     //로아 API 끝-----------------------------
-    //보석----------------------------------
-    // let charGem = ""; //보석
-    // let gemsJSON = JSON.parse(LOSTARKGET.text());
-    // if(gemsJSON != null){
-    //   for(let i = 0; i < gemsJSON.Gems.length ; i++){
-    //     charGem = charGem + "[" + gemsJSON.Gems[i].Name + "] ";
-    //     for(let j = 0; j < gemsJSON.Gems.length ; j ++){
-    //       if(gemsJSON.Gems[i].Slot == gemsJSON.Effects[j].GemSlot) charGem = charGem + gemsJSON.Effects[j].Name + "\n";
-    //     }
-    //   }
-    // } else if(gemsJSON == null){charGem = "장착 중인 보석이 없습니다.\n";}
-    //배럭------------------------------------
-    // let charList = ""; //배럭
-    // let charJSON = JSON.parse(LOSTARKGET.text());
-    // for(let i = 0 ; i < charJSON.length ; i++){
-    //   charList = charList + "[" + charJSON[i].ServerName + "/" + charJSON[i].CharacterClassName + "/" + charJSON[i].ItemMaxLevel + "] " + charJSON[i].CharacterName + "\n";
-    // }
     
     //이미지url을 받아서 cloudinary에 업로드------------------
     //replier.reply(dataJSON.imgIndex);
@@ -114,6 +122,17 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 }
 function getJson(characterName, apiName){
   let LOSTARKGETAPI = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/" + characterName + "/" + apiName)
+                                        .header("Authorization", "bearer " + LOSTARK_API_KEY)
+                                        .header("Content-Type", "application/json")
+                                        .ignoreContentType(true)
+                                        .ignoreHttpErrors(true)
+                                        .get();
+  if(LOSTARKGETAPI == null) return;
+  let jsonData = JSON.parse(LOSTARKGETAPI.text());
+  return jsonData;
+}
+function getJsonSiblings(characterName, apiName){
+  let LOSTARKGETAPI = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/characters/" + characterName + "/" + apiName)
                                         .header("Authorization", "bearer " + LOSTARK_API_KEY)
                                         .header("Content-Type", "application/json")
                                         .ignoreContentType(true)
