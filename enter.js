@@ -50,6 +50,10 @@ function getRoomInfo(link, name) {
 }
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName){
   if( msg==("/방정보")){
-    replier.reply(JSON.stringify(getRoomInfo("https://open.kakao.com/o/giQ3rfrf","테스트1"),0,2));
+    let jsonData = JSON.stringify(getRoomInfo("https://open.kakao.com/o/giQ3rfrf","테스트1"),0,2); //데이터 받아오기
+    if(jsonData == null) return; //예외처리
+    
+    let jsonObj = JSON.parse(jsonData.text()); //json으로 파싱
+    replier.reply(jsonObj.mcnt, jsonObj.rc);
   }
 }
