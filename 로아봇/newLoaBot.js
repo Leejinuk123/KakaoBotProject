@@ -89,6 +89,9 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                           + allsee
                           + "보석 : \n" + gems + "\n"
                           + "배럭 : \n" + siblings + "\n"
+                          + "\n자세한 정보는 아래 \"일로아\", \"로아와\"로 확인하세요!\n"
+                          + "https://loawa.com/char/" + characterName + "\n"
+                          + "https://iloa.gg/character/" + characterName + "\n"
                           + ""; 
     //로아 API 끝-----------------------------
     
