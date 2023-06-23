@@ -102,9 +102,9 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                             .data('public_id',"_"+dataJSON.imgIndex)
                             .ignoreContentType(true)
                             .post();
-    replier.reply("http://loa.dothome.co.kr/index.html/?cN="+charName[1]+"&iL=_"+dataJSON.imgIndex);
+    replier.reply("http://loa.dothome.co.kr/index.html/?cN="+characterName+"&iL=_"+dataJSON.imgIndex);
     FileStream.write("/sdcard/imgIndex.json", JSON.stringify(dataJSON));
-    -------------------------------------정보출력 시작
+    //-------------------------------------정보출력 시작
     replier.reply(profileMessageOut);
   }
   
