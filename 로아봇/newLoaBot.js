@@ -17,39 +17,39 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
   if(msg.startsWith("/정보 ")){
     characterName = msg.split(" "); characterName = characterName[1];
 
-    let characterProfile = getJson(characterName,profiles);
+    let characterProfile = getJson(characterName,"profiles");
     if(characterProfile == null||characterProfile.CharacterImage == null) {replire.reply("없거나 휴면 캐릭터인 정보입니다."); return;}
-    let characterEngravings = getJson(characterName,engravings);
-    let characterCards = getJson(characterName,cards);
+    let characterEngravings = getJson(characterName,"engravings");
+    let characterCards = getJson(characterName,"cards");
     //테스트후보군 :  배마욱, 우비욱, 근브렐유지캐릭터
     //템렙(),전투렙(),원대렙()
     //길드(서버)
-    if(characterProfile.GuildName == null) let gulidName = "-";
-    else let guildName = characterProfile.GuildName;
+    if(characterProfile.GuildName == null) var gulidName = "-";
+    else var guildName = characterProfile.GuildName;
     //특성비
     //공격력,체력
     if(characterProfile.Stats == null){
-      let stats = "-";
-      let HPAD = "-";
+      var stats = "-";
+      var HPAD = "-";
     }
     else {
-      let stats = "치(" + characterProfile.Stats[0].Value + ") 특(" + characterProfile.Stats[1].Value + ") 신(" + characterProfile.Stats[3].Value + ")";
-      let HPAD = "체력(" + characterProfile.Stats[6].Value + ") 공격력(" + characterProfile.Stats[7].Value + ")"
+      var stats = "치(" + characterProfile.Stats[0].Value + ") 특(" + characterProfile.Stats[1].Value + ") 신(" + characterProfile.Stats[3].Value + ")";
+      var HPAD = "체력(" + characterProfile.Stats[6].Value + ") 공격력(" + characterProfile.Stats[7].Value + ")"
     }
     //각인
-    if(characterEngravings == null) let engravings = "-";
+    if(characterEngravings == null) var engravings = "-";
     else {
-      let engravings = "";
+      var engravings = "";
       for(let i = 0 ; i < characterEngravings.Effects.length ; i++){
         engravings = engravings + characterEngravings.Effects[i].Name + " ";
       }
       engravings = engravings.replace(" Lv. ","");
     }
     //카드(세트이름만)
-    if(characterCards == null) let cards = "-";
+    if(characterCards == null) var cards = "-";
     else {
-      let cards = "";
-      let cardsIndex = "";
+      var cards = "";
+      var cardsIndex = "";
       for(let i = 0 ; i < characterCards.Effects.length ; i++){
         for(let j = 0 ; j < characterCards.Effects[i].Items.length ; j++){
           cardsIndex = characterCards.Effects[i].Items[j].Name;
@@ -116,6 +116,8 @@ function getJson(characterName, apiName){
   let LOSTARKGETAPI = org.jsoup.Jsoup.connect("https://developer-lostark.game.onstove.com/armories/characters/" + characterName + "/" + apiName)
                                         .header("Authorization", "bearer " + LOSTARK_API_KEY)
                                         .header("Content-Type", "application/json")
+                                        .ignoreContentType(true)
+                                        .ignoreHttpErrors(true)
                                         .get();
   if(LOSTARKGETAPI == null) return;
   let jsonData = JSON.parse(LOSTARKGETAPI.text());
