@@ -8,7 +8,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     try {
         let data = {
         };
-        let response = org.jsoup.Jsoup.connect("https://vapis.run.goorm.site/api/chatgpt?plusId=eZpOMB_kCJ1o&word="+msg)
+        let response = org.jsoup.Jsoup.connect("https://vapis.run.goorm.site/api/chatgpt4?plusId=eZpOMB_kCJ1o&word="+msg)
             .header("Authorization", "KakaoAK ") // Open ai 토큰값 Authorization: KakaoAK {REST_API_KEY}
             .header("Content-Type", "application/json")
             .ignoreContentType(true)
